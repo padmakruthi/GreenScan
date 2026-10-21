@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Kruthi",
+    "badge": "🥇 Eco Champion",
+    "xp": 1150,
+    "items": 34,
+    "streak": 5,
+    "rank": 1
+  },
+  {
+    "name": "B P S Kruthi",
+    "badge": "🥈 Green Pioneer",
+    "xp": 380,
+    "items": 26,
+    "streak": 5,
+    "rank": 2
+  },
+  {
+    "name": "Anreddy Lahari",
+    "badge": "🥉 Zero Waste Hero",
+    "xp": 340,
+    "items": 22,
+    "streak": 4,
+    "rank": 3
+  },
+  {
+    "name": "SmartCity_Hyd",
+    "badge": "🌱 Sorter Pro",
+    "xp": 280,
+    "items": 19,
+    "streak": 3,
+    "rank": 4
+  },
+  {
+    "name": "EcoWarrior_07",
+    "badge": "🌱 Sorter Pro",
+    "xp": 210,
+    "items": 14,
+    "streak": 2,
+    "rank": 5
+  },
+  {
+    "name": "Circular_Agent",
+    "badge": "♻️ Recycler",
+    "xp": 160,
+    "items": 11,
+    "streak": 2,
+    "rank": 6
+  }
+]

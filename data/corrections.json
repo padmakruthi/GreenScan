@@ -1,0 +1,70 @@
+[
+  {
+    "id": "fb-1792520530712",
+    "predicted_category": "plastic",
+    "corrected_category": "glass",
+    "filename": "scanned_item.jpg",
+    "confidence": 0.99,
+    "user_note": "",
+    "timestamp": "2026-10-20T23:52:10.712761"
+  },
+  {
+    "id": "fb-1792520502980",
+    "predicted_category": "plastic",
+    "corrected_category": "glass",
+    "filename": "scanned_item.jpg",
+    "confidence": 0.99,
+    "user_note": "",
+    "timestamp": "2026-10-20T23:51:42.980810"
+  },
+  {
+    "id": "fb-1792520449133",
+    "predicted_category": "metal",
+    "corrected_category": "glass",
+    "filename": "scanned_item.jpg",
+    "confidence": 0.99,
+    "user_note": "",
+    "timestamp": "2026-10-20T23:50:49.133905"
+  },
+  {
+    "id": "fb-1792519983037",
+    "predicted_category": "glass",
+    "corrected_category": "plastic",
+    "filename": "",
+    "confidence": 0.92,
+    "user_note": "",
+    "timestamp": "2026-10-20T23:43:03.037640"
+  },
+  {
+    "id": "fb-1792517916583",
+    "predicted_category": "glass",
+    "corrected_category": "plastic",
+    "confidence": 0.868,
+    "user_note": "User feedback from GreenScan Correct-It dropdown",
+    "timestamp": "2026-10-20T23:08:36.583208"
+  },
+  {
+    "id": "fb-1792517852337",
+    "predicted_category": "metal",
+    "corrected_category": "glass",
+    "confidence": 0.878,
+    "user_note": "User feedback from GreenScan Correct-It dropdown",
+    "timestamp": "2026-10-20T23:07:32.337632"
+  },
+  {
+    "id": "fb-1792517822610",
+    "predicted_category": "glass",
+    "corrected_category": "plastic",
+    "confidence": 0.858,
+    "user_note": "User feedback from GreenScan Correct-It dropdown",
+    "timestamp": "2026-10-20T23:07:02.610658"
+  },
+  {
+    "id": "fb-1792517792797",
+    "predicted_category": "glass",
+    "corrected_category": "plastic",
+    "confidence": 0.854,
+    "user_note": "User feedback from GreenScan Correct-It dropdown",
+    "timestamp": "2026-10-20T23:06:32.797597"
+  }
+]

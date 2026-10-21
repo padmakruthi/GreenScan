@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenScan - Smart Waste Recycling Assistant Using Image Recognition and AI Recommendations</title>
+  <!-- Google Fonts: Plus Jakarta Sans & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800;1,900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♻️</text></svg>">
+</head>
+<body>
+
+  <div class="site-wrapper">
+
+    <!-- Top Navigation Header (Inspired by RECYCLEE) -->
+    <header class="main-header">
+      <a href="#" class="brand-container">
+        <div class="brand-icon-box">
+          <!-- 3D Geometric Recycle Leaf SVG -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <path d="M12 15V3"></path>
+            <path d="M21 16.5A6.5 6.5 0 0 1 10.5 21"></path>
+            <path d="M3 16.5A6.5 6.5 0 0 0 13.5 21"></path>
+          </svg>
+        </div>
+        <div class="brand-title">
+          GREEN<span>SCAN</span>
+        </div>
+        <span class="tagline-pill">Point. Learn. Recycle.</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#scan-studio" class="active">AI Scanner</a></li>
+          <li><a href="#leaderboard-section">Leaderboard</a></li>
+          <li><a href="#kaggle-section">Kaggle Dataset</a></li>
+          <li><a href="#wastedex-section">3D Wastedex</a></li>
+          <li><a href="#maps-section">Google Maps Radar</a></li>
+          <li><a href="#impact-section">Eco Impact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Theme Toggle -->
+        <button class="btn-theme-toggle" id="theme-toggle" title="Toggle Light / Dark Mode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+
+        <a href="#scan-studio" class="btn-cta-green">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+          Quick Scan
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero Section (Matches Reference Image Exactly: Clean Industrial Pipeline, No Duplicate Text, No SDG Clutter) -->
+    <section class="hero-outer-card">
+      <img src="img/hero_banner.png" alt="Smart Recycling Hero Banner" class="hero-banner-main">
+      
+      <!-- Interactive Hotspots over the two frosted cards in the image -->
+      <div class="hero-hotspots">
+        <div class="hero-hotspot" onclick="document.getElementById('maps-section').scrollIntoView({behavior: 'smooth'})" title="Doorstep E-Waste Collection: View Drop-off Centers"></div>
+        <div class="hero-hotspot" onclick="document.getElementById('scan-studio').scrollIntoView({behavior: 'smooth'})" title="IT Product Refurbishment: AI Waste Scanner"></div>
+      </div>
+    </section>
+
+    <!-- 3D Vector SVG Category Quick Bar (Handcrafted 3D Gradient Vector Icons) -->
+    <section class="category-strip">
+      <div class="cat-pill-card" onclick="simulateSmartClassification('plastic_bottle.jpg')">
+        <div class="cat-3d-svg-wrap" id="cat-svg-plastic">
+          <!-- 3D Plastic Bottle SVG injected via JS -->
+        </div>
+        <span class="name">Plastic</span>
+        <span class="bin-tag bg-yellow-bin">Yellow Bin</span>
+      </div>
+
+      <div class="cat-pill-card" onclick="simulateSmartClassification('cardboard_box.jpg')">
+        <div class="cat-3d-svg-wrap" id="cat-svg-paper">
+          <!-- 3D Cardboard Box SVG injected via JS -->
+        </div>
+        <span class="name">Paper &amp; Cardboard</span>
+        <span class="bin-tag bg-blue-bin">Blue Bin</span>
+      </div>
+
+      <div class="cat-pill-card" onclick="simulateSmartClassification('glass_jar.jpg')">
+        <div class="cat-3d-svg-wrap" id="cat-svg-glass">
+          <!-- 3D Glass Jar SVG injected via JS -->
+        </div>
+        <span class="name">Glass</span>
+        <span class="bin-tag bg-teal-bin">Teal Bin</span>
+      </div>
+
+      <div class="cat-pill-card" onclick="simulateSmartClassification('soda_can.jpg')">
+        <div class="cat-3d-svg-wrap" id="cat-svg-metal">
+          <!-- 3D Metal Can SVG injected via JS -->
+        </div>
+        <span class="name">Metal &amp; Cans</span>
+        <span class="bin-tag bg-grey-bin">Silver Bin</span>
+      </div>
+
+      <div class="cat-pill-card" onclick="simulateSmartClassification('banana_peel.jpg')">
+        <div class="cat-3d-svg-wrap" id="cat-svg-organic">
+          <!-- 3D Organic Apple SVG injected via JS -->
+        </div>
+        <span class="name">Organic</span>
+        <span class="bin-tag bg-green-bin">Green Bin</span>
+      </div>
+
+      <div class="cat-pill-card" onclick="simulateSmartClassification('battery_circuit.jpg')">
+        <div class="cat-3d-svg-wrap" id="cat-svg-ewaste">
+          <!-- 3D E-Waste Circuit SVG injected via JS -->
+        </div>
+        <span class="name">E-Waste</span>
+        <span class="bin-tag bg-orange-bin">Orange Bin</span>
+      </div>
+    </section>
+
+    <!-- User Profile Bar with Leaderboard Rank and Edit Name -->
+    <div class="user-profile-bar">
+      <div class="user-profile-left">
+        <div class="user-avatar-circle" id="user-display-avatar">K</div>
+        <div class="user-title-text">
+          Eco Warrior: <strong id="user-display-name">B P S Kruthi</strong>
+        </div>
+        <span class="rank-badge-pill" id="user-display-rank">Rank #1</span>
+      </div>
+      <button class="btn-edit-name" id="btn-open-name-modal">
+        <span>✏️</span> Set Your Name
+      </button>
+    </div>
+
+    <!-- Gamification & Impact Overview Bar -->
+    <section class="gamification-impact-grid" id="impact-section">
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: #fef3c7; color: #b45309;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </div>
+        <div class="metric-info">
+          <h3 id="stat-xp">120 XP</h3>
+          <p>Eco Experience</p>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: #fee2e2; color: #dc2626;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"></path></svg>
+        </div>
+        <div class="metric-info">
+          <h3 id="stat-streak">4 Days</h3>
+          <p>Daily Streak</p>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: #dbeafe; color: #1d4ed8;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+        </div>
+        <div class="metric-info">
+          <h3 id="stat-sorted">18</h3>
+          <p>Items Sorted</p>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: #dcfce7; color: #15803d;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        </div>
+        <div class="metric-info">
+          <h3 id="stat-co2">24.6 kg</h3>
+          <p>CO₂ Diverted</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Live AI Scanning & Inspection Studio -->
+    <section class="studio-grid" id="scan-studio">
+      <!-- Left: Input Viewport & Preprocessing Inspector -->
+      <div class="studio-card">
+        <div class="studio-title-row">
+          <h2>
+            <span>🔍</span> AI Waste Classifier
+          </h2>
+          <div class="mode-pills">
+            <button class="mode-pill active" id="mode-upload">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Upload
+            </button>
+            <button class="mode-pill" id="mode-camera">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+              Camera
+            </button>
+          </div>
+        </div>
+
+        <!-- Viewport Box -->
+        <div class="scanner-viewport" id="drop-zone">
+          <input type="file" id="file-input" accept="image/*" style="display: none;">
+          
+          <div class="viewport-idle">
+            <!-- 3D Cloud/Scanner Vector Icon -->
+            <svg class="doodle-upload-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M48 38C52.4 38 56 34.4 56 30C56 26.2 53.3 23 49.6 22.2C48.8 15.3 43 10 36 10C30.2 10 25.2 13.6 23.2 18.8C22.2 18.3 21.1 18 20 18C14.5 18 10 22.5 10 28C10 28.7 10.1 29.4 10.3 30.1C6.7 31.3 4 34.8 4 39C4 44 8 48 13 48H48" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+              <polyline points="26 36 32 30 38 36" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="32" y1="30" x2="32" y2="44" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <h4>Drop waste photo or click to browse</h4>
+            <p>Supports JPG, PNG, WEBP, or live camera capture</p>
+          </div>
+
+          <!-- Video live element -->
+          <video id="camera-stream" playsinline autoplay muted></video>
+          <!-- Image preview element -->
+          <img id="preview-img" alt="Captured Waste Item">
+          <!-- Scanning line animation -->
+          <div class="camera-scanning-line"></div>
+        </div>
+
+        <!-- Controls Action Row -->
+        <div class="scanner-controls">
+          <button class="btn-scan-main" id="btn-scan-action">
+            <span>⚡</span> Choose Image to Scan
+          </button>
+          <button class="btn-outline" id="btn-sample-pick" title="Quick sample test">
+            <span>🎲</span> Sample Demo
+          </button>
+        </div>
+
+        <!-- Computer Vision Preprocessing Inspector -->
+        <div class="preprocessing-inspector">
+          <div class="inspector-header">
+            <span>Computer Vision Pipeline</span>
+            <span>224 × 224 Tensor</span>
+          </div>
+          <div class="stages-grid">
+            <div class="stage-card">
+              <img id="stage-orig-img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='70'><rect width='100%' height='100%' fill='%23cbd5e1'/></svg>" alt="RGB View">
+              <span>1. Normalized RGB</span>
+            </div>
+            <div class="stage-card">
+              <img id="stage-edge-img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='70'><rect width='100%' height='100%' fill='%23334155'/></svg>" alt="Edge Grayscale">
+              <span>2. Feature Filter</span>
+            </div>
+            <div class="stage-card">
+              <div class="tensor-cube" id="stage-tensor-txt">[1, 224, 224, 3]</div>
+              <span>3. MobileNetV2 Tensor</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Ticket Result & Recommendation Studio -->
+      <div class="studio-card ticket-wrapper">
+        <!-- Empty Placeholder State -->
+        <div class="ticket-empty" id="ticket-empty">
+          <div class="ticket-empty-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <h3>Inspection Ticket Waiting</h3>
+          <p>Scan or upload a recyclable item to generate disposal instructions, bin color, and instant eco-quiz.</p>
+        </div>
+
+        <!-- Active Ticket Container -->
+        <div class="ticket-active" id="ticket-active">
+          <!-- Language Selector & Confidence Header -->
+          <div class="ticket-top-controls">
+            <div class="ticket-lang-selector">
+              <span class="lang-label">🌐 Language:</span>
+              <button class="lang-btn active" data-lang="en">English</button>
+              <button class="lang-btn" data-lang="te">తెలుగు</button>
+              <button class="lang-btn" data-lang="hi">हिंदी</button>
+            </div>
+            <div class="confidence-meter">
+              <span class="conf-label" id="ticket-conf-label">Confidence Score</span>
+              <span class="conf-val" id="ticket-conf-val">95.4%</span>
+            </div>
+          </div>
+
+          <!-- Bin Stamp Badge -->
+          <div class="ticket-header-badge" style="margin-bottom: 14px;">
+            <div class="bin-stamp" id="ticket-bin-stamp">
+              <!-- Injected dynamically with 3D SVG -->
+            </div>
+          </div>
+
+          <!-- Identified Category Title -->
+          <h3 class="ticket-item-title" id="ticket-item-name">Plastic Recyclable</h3>
+
+          <!-- Directly Matched Nearest Drop-off Center based on scanned category -->
+          <div class="ticket-matched-center-box" id="ticket-matched-center-box">
+            <div class="matched-center-header">
+              <span class="center-badge-category" id="matched-center-cat-tag">Nearest Drop-off</span>
+              <span class="matched-distance-pill" id="matched-center-distance">1.1 km away</span>
+            </div>
+            <h4 id="matched-center-name">Smart City Central Recycling &amp; Recovery Park</h4>
+            <p id="matched-center-address">Sector 4 Industrial Zone, Hyderabad</p>
+            <div class="matched-center-actions">
+              <a href="#" target="_blank" id="matched-center-nav-btn" class="btn-direct-maps">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+                <span id="nav-btn-text">Open in Google Maps (Turn-by-turn Directions)</span>
+              </a>
+              <button class="btn-outline-small" id="btn-scroll-radar" onclick="scrollToMapsAndSelect()">
+                <span>📍</span> <span id="radar-btn-text">View on Map Below</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Do's and Don'ts Grid -->
+          <div class="ticket-dos-donts">
+            <div class="guideline-box dos">
+              <h5 id="ticket-dos-title"><span>✅</span> Proper Do's</h5>
+              <ul id="ticket-dos-list">
+                <li>Rinse to clear leftover food or liquid.</li>
+                <li>Check for resin recycling codes #1 or #2.</li>
+              </ul>
+            </div>
+            <div class="guideline-box donts">
+              <h5 id="ticket-donts-title"><span>❌</span> Critical Don'ts</h5>
+              <ul id="ticket-donts-list">
+                <li>Never mix with wet kitchen waste.</li>
+                <li>Do not leave caps loose if forbidden locally.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Contamination Checklist -->
+          <div class="contamination-checklist">
+            <div class="checklist-title" id="contamination-check-title">
+              <span>🛡️</span> Contamination Prevention Check (+25 XP)
+            </div>
+            <label class="check-item">
+              <input type="checkbox" class="contam-check">
+              <span>Rinsed and emptied of all liquids/food residue</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" class="contam-check">
+              <span>External adhesive tape or non-recyclable wraps removed</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" class="contam-check">
+              <span>Completely dry to prevent mold in paper/dry bins</span>
+            </label>
+          </div>
+
+          <!-- Correct-It Feature (Active Learning Feedback Loop) -->
+          <div class="correct-it-section">
+            <div class="correct-it-text">
+              <span>⚠️</span> Wrong prediction? Correct it to train the model:
+            </div>
+            <select class="correct-select" id="correct-category-select">
+              <option value="">Choose correct class...</option>
+              <option value="plastic">Plastic</option>
+              <option value="paper">Paper / Cardboard</option>
+              <option value="glass">Glass</option>
+              <option value="metal">Metal / Can</option>
+              <option value="organic">Organic / Compost</option>
+              <option value="e-waste">E-Waste</option>
+            </select>
+          </div>
+
+          <!-- Eco Knowledge Fact & Quiz -->
+          <div class="quiz-knowledge-card">
+            <div class="knowledge-fact">
+              <span class="knowledge-fact-icon">💡</span>
+              <p id="ticket-fact-text">Recycling a single aluminum can saves enough energy to run a TV for 3 hours!</p>
+            </div>
+            <div class="quiz-box">
+              <div class="quiz-question" id="quiz-question">Quiz question appears here...</div>
+              <div class="quiz-options" id="quiz-options"></div>
+              <div class="quiz-feedback-text" id="quiz-feedback"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kagglehub Real Dataset Section (Showcases exact dataset & real photos) -->
+    <section class="kaggle-hub-card" id="kaggle-section">
+      <div class="kaggle-header">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 10px;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#20beff" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            Dataset We Use: Kaggle Garbage Classification
+          </h2>
+          <p style="color: #94a3b8; font-size: 0.88rem;">
+            Integrated with Kaggle dataset <code>asdasdasasdas/garbage-classification</code> via <code>kagglehub</code>.
+          </p>
+        </div>
+        <span class="kaggle-badge">Kagglehub Connected</span>
+      </div>
+
+      <!-- Dedicated Code Snippet as requested -->
+      <div class="code-snippet-box">
+<span style="color: #f472b6;">import</span> kagglehub<br><br>
+<span style="color: #64748b;"># Download latest version</span><br>
+path = kagglehub.<span style="color: #38bdf8;">dataset_download</span>(<span style="color: #a7f3d0;">"asdasdasasdas/garbage-classification"</span>)<br>
+<span style="color: #38bdf8;">print</span>(<span style="color: #a7f3d0;">"Path to dataset files:"</span>, path)
+      </div>
+
+      <p id="dataset-status-txt" style="font-size: 0.85rem; margin-bottom: 16px; color: #cbd5e1;">
+        Checking Kagglehub dataset cache...
+      </p>
+
+      <!-- Real Dataset Sample Thumbnails from actual local dataset cache -->
+      <div class="dataset-sample-grid">
+        <div class="dataset-sample-card">
+          <img src="img/dataset_samples/cardboard_sample.jpg" alt="Cardboard Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <div class="cls-name">Cardboard</div>
+          <div class="cls-count">403 Images</div>
+        </div>
+
+        <div class="dataset-sample-card">
+          <img src="img/dataset_samples/glass_sample.jpg" alt="Glass Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <div class="cls-name">Glass</div>
+          <div class="cls-count">501 Images</div>
+        </div>
+
+        <div class="dataset-sample-card">
+          <img src="img/dataset_samples/metal_sample.jpg" alt="Metal Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <div class="cls-name">Metal</div>
+          <div class="cls-count">410 Images</div>
+        </div>
+
+        <div class="dataset-sample-card">
+          <img src="img/dataset_samples/paper_sample.jpg" alt="Paper Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <div class="cls-name">Paper</div>
+          <div class="cls-count">594 Images</div>
+        </div>
+
+        <div class="dataset-sample-card">
+          <img src="img/dataset_samples/plastic_sample.jpg" alt="Plastic Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <div class="cls-name">Plastic</div>
+          <div class="cls-count">482 Images</div>
+        </div>
+
+        <div class="dataset-sample-card">
+          <img src="img/dataset_samples/trash_sample.jpg" alt="Trash Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <div class="cls-name">Organic / Trash</div>
+          <div class="cls-count">137 Images</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3D Wastedex: 6-Category Collector System -->
+    <section class="wastedex-section" id="wastedex-section">
+      <div class="section-header">
+        <div>
+          <h2>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+            The 3D Wastedex Collector
+          </h2>
+          <p>Scan and discover all 6 primary waste streams to achieve Zero Waste Champion status.</p>
+        </div>
+        <div id="wastedex-progress-txt" style="font-weight: 800; color: var(--primary);">
+          3 / 6 Categories Collected
+        </div>
+      </div>
+
+      <div class="wastedex-grid">
+        <div class="wastedex-card unlocked" data-category="plastic">
+          <div class="badge-svg-wrap"></div>
+          <h4>Plastic</h4>
+          <span class="count-pill">Discovered ✓</span>
+        </div>
+        <div class="wastedex-card unlocked" data-category="paper">
+          <div class="badge-svg-wrap"></div>
+          <h4>Paper &amp; Cardboard</h4>
+          <span class="count-pill">Discovered ✓</span>
+        </div>
+        <div class="wastedex-card unlocked" data-category="metal">
+          <div class="badge-svg-wrap"></div>
+          <h4>Metal</h4>
+          <span class="count-pill">Discovered ✓</span>
+        </div>
+        <div class="wastedex-card locked" data-category="glass">
+          <div class="badge-svg-wrap"></div>
+          <h4>Glass</h4>
+          <span class="count-pill">Locked 🔒</span>
+        </div>
+        <div class="wastedex-card locked" data-category="organic">
+          <div class="badge-svg-wrap"></div>
+          <h4>Organic</h4>
+          <span class="count-pill">Locked 🔒</span>
+        </div>
+        <div class="wastedex-card locked" data-category="e-waste">
+          <div class="badge-svg-wrap"></div>
+          <h4>E-Waste</h4>
+          <span class="count-pill">Locked 🔒</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Google Maps API & Real Geolocation Navigation Hub -->
+    <section class="maps-section" id="maps-section">
+      <div class="section-header">
+        <div>
+          <h2>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+            Google Maps Recycling Center Navigator
+          </h2>
+          <p>Live GPS positioning &amp; instant turn-by-turn driving directions to certified Smart City drop-offs.</p>
+        </div>
+        <!-- Category Filter Tabs -->
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <button class="mode-pill active radar-filter-btn" data-filter="all">All</button>
+          <button class="mode-pill radar-filter-btn" data-filter="e-waste">E-Waste</button>
+          <button class="mode-pill radar-filter-btn" data-filter="plastic">Plastic</button>
+          <button class="mode-pill radar-filter-btn" data-filter="paper">Paper</button>
+          <button class="mode-pill radar-filter-btn" data-filter="organic">Organic</button>
+        </div>
+      </div>
+
+      <div class="google-maps-hub-container">
+        <!-- Interactive Google Map Frame -->
+        <div class="map-wrapper-card">
+          <div class="map-header-status">
+            <span class="live-gps-badge">
+              <span class="gps-pulse-dot"></span>
+              <span id="user-location-label">Detecting Current GPS Location...</span>
+            </span>
+            <button class="btn-outline" style="padding: 4px 12px; font-size: 0.75rem;" onclick="attemptGeoLocation()">
+              <span>📍</span> Refresh GPS
+            </button>
+          </div>
+          <div class="google-map-iframe-box">
+            <iframe id="google-map-iframe" src="https://maps.google.com/maps?q=17.3850,78.4867&z=13&output=embed" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+
+        <!-- Verified Recycling Centers List with 1-Click Directions -->
+        <div class="nearby-list-container" id="nearby-centers-list">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Smart City Recycling Leaderboard Section -->
+    <section class="leaderboard-section" id="leaderboard-section">
+      <div class="section-header">
+        <div>
+          <h2>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+            Smart City Eco Leaderboard
+          </h2>
+          <p>Compete with fellow green citizens, earn rewards, and climb the sustainability rankings.</p>
+        </div>
+        <button class="btn-outline" onclick="openNameModal()" style="font-size: 0.82rem; padding: 6px 14px;">
+          <span>👤</span> Update My Name
+        </button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th style="width: 70px;">Rank</th>
+              <th>Eco Warrior</th>
+              <th>Badge</th>
+              <th>Experience</th>
+              <th>Items Sorted</th>
+              <th>Streak</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-body">
+            <!-- Populated dynamically via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Recent History Log -->
+    <section class="history-section" style="background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 24px; margin-bottom: 40px;">
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        Recent Recycling History
+      </h3>
+      <div id="history-list"></div>
+    </section>
+
+    <!-- Footer with Full Project & Team Details -->
+    <footer class="main-footer">
+      <div>
+        <p><strong>GreenScan</strong> — Smart Waste Recycling Assistant Using Image Recognition and AI Recommendations</p>
+        <p style="font-size: 0.8rem; margin-top: 4px;">Tagline: <em>Point. Learn. Recycle.</em> | Prototype Validated in a Lab Environment (TRL 4)</p>
+      </div>
+      <div class="footer-team">
+        Team: B P S Kruthi (24951A05E9) &amp; Anreddy Lahari (24951A05F0)
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- User Name & Eco Warrior Modal Overlay -->
+  <div class="name-modal-overlay" id="name-modal-overlay">
+    <div class="name-modal-box">
+      <div class="name-modal-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+      </div>
+      <h3>Claim Your Recycling Rewards!</h3>
+      <p>Enter your Eco Warrior name to appear on the Smart City leaderboard and record your sorting achievements:</p>
+      <input type="text" id="user-name-input" class="name-input-field" placeholder="Enter your name (e.g., Kruthi)" maxlength="24">
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-outline" style="flex: 1;" onclick="closeNameModal()">Cancel</button>
+        <button class="btn-save-name" id="btn-save-name" style="flex: 2;">Save &amp; Claim Rank</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Handcrafted 3D Vector SVG Icons Engine -->
+  <script src="js/icons.js"></script>
+  <!-- Multilingual Waste Guidance Engine (English, Telugu, Hindi) -->
+  <script src="js/translations.js"></script>
+  <!-- JavaScript Engine -->
+  <script src="js/app.js"></script>
+  <script>
+    // Inject the handcrafted 3D SVG icons into the category strip on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("cat-svg-plastic").innerHTML = getGreenScan3DIcon("plastic");
+      document.getElementById("cat-svg-paper").innerHTML = getGreenScan3DIcon("paper");
+      document.getElementById("cat-svg-glass").innerHTML = getGreenScan3DIcon("glass");
+      document.getElementById("cat-svg-metal").innerHTML = getGreenScan3DIcon("metal");
+      document.getElementById("cat-svg-organic").innerHTML = getGreenScan3DIcon("organic");
+      document.getElementById("cat-svg-ewaste").innerHTML = getGreenScan3DIcon("e-waste");
+    });
+  </script>
+</body>
+</html>
