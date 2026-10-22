@@ -1,5 +1,203 @@
 [
   {
+    "id": "scan-1792692410114",
+    "category": "paper",
+    "category_name": "Paper & Cardboard",
+    "confidence": 0.907,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:36 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792692369783",
+    "category": "glass",
+    "category_name": "Glass Container",
+    "confidence": 0.933,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:36 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792691911882",
+    "category": "organic",
+    "category_name": "Organic & Biodegradable",
+    "confidence": 0.937,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:28 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792691725521",
+    "category": "paper",
+    "category_name": "Paper & Cardboard",
+    "confidence": 0.941,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:25 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792691616471",
+    "category": "organic",
+    "category_name": "Organic & Biodegradable",
+    "confidence": 0.962,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:23 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792691268979",
+    "category": "plastic",
+    "category_name": "Plastic Recyclable",
+    "confidence": 0.922,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:17 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792690976271",
+    "category": "plastic",
+    "category_name": "Plastic Recyclable",
+    "confidence": 0.89,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:12 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792690934125",
+    "category": "metal",
+    "category_name": "Metal & Cans",
+    "confidence": 0.916,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:12 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792690908341",
+    "category": "glass",
+    "category_name": "Glass Container",
+    "confidence": 0.94,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:11 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792690874322",
+    "category": "metal",
+    "category_name": "Metal & Cans",
+    "confidence": 0.925,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:11 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792690859510",
+    "category": "paper",
+    "category_name": "Paper & Cardboard",
+    "confidence": 0.949,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:10 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792690849657",
+    "category": "metal",
+    "category_name": "Metal & Cans",
+    "confidence": 0.899,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:10 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792690807017",
+    "category": "metal",
+    "category_name": "Metal & Cans",
+    "confidence": 0.897,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:10 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792690793404",
+    "category": "metal",
+    "category_name": "Metal & Cans",
+    "confidence": 0.94,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:09 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792690773703",
+    "category": "plastic",
+    "category_name": "Plastic Recyclable",
+    "confidence": 0.876,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:09 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792690764177",
+    "category": "metal",
+    "category_name": "Metal & Cans",
+    "confidence": 0.912,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:09 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792690718081",
+    "category": "glass",
+    "category_name": "Glass Container",
+    "confidence": 0.894,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 11:08 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792685371922",
+    "category": "organic",
+    "category_name": "Organic & Biodegradable",
+    "confidence": 0.949,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 09:39 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792685363789",
+    "category": "glass",
+    "category_name": "Glass Container / Jar",
+    "confidence": 0.962,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 09:39 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792685351374",
+    "category": "paper",
+    "category_name": "Paper & Cardboard",
+    "confidence": 0.878,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 09:39 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792685342022",
+    "category": "plastic",
+    "category_name": "Plastic Recyclable",
+    "confidence": 0.922,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 09:39 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792685200697",
+    "category": "organic",
+    "category_name": "Organic & Biodegradable",
+    "confidence": 0.889,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 22, 2026 - 09:36 PM",
+    "thumbnail": null
+  },
+  {
     "id": "scan-1792520819709",
     "category": "organic",
     "category_name": "Organic & Biodegradable",

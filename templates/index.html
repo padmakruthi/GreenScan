@@ -37,15 +37,32 @@
       <nav>
         <ul class="nav-links">
           <li><a href="#scan-studio" class="active">AI Scanner</a></li>
-          <li><a href="#leaderboard-section">Leaderboard</a></li>
-          <li><a href="#kaggle-section">Kaggle Dataset</a></li>
+          <li><a href="#test-sandbox-section">Test Samples</a></li>
           <li><a href="#wastedex-section">3D Wastedex</a></li>
           <li><a href="#maps-section">Google Maps Radar</a></li>
-          <li><a href="#impact-section">Eco Impact</a></li>
+          <li><a href="#leaderboard-section">Leaderboard</a></li>
+          <li><a href="#about-section">About Us</a></li>
         </ul>
       </nav>
 
       <div class="header-actions">
+        <!-- Global Language Selector (11 Languages) -->
+        <div class="header-lang-wrapper">
+          <select class="header-lang-select" id="header-lang-select" title="Change Language">
+            <option value="en">🌐 English</option>
+            <option value="te">తెలుగు (Telugu)</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="ta">தமிழ் (Tamil)</option>
+            <option value="kn">ಕನ್ನಡ (Kannada)</option>
+            <option value="ml">മലയാളം (Malayalam)</option>
+            <option value="mr">मराठी (Marathi)</option>
+            <option value="bn">বাংলা (Bengali)</option>
+            <option value="es">Español (Spanish)</option>
+            <option value="fr">Français (French)</option>
+            <option value="de">Deutsch (German)</option>
+          </select>
+        </div>
+
         <!-- Theme Toggle -->
         <button class="btn-theme-toggle" id="theme-toggle" title="Toggle Light / Dark Mode">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -74,8 +91,8 @@
       
       <!-- Interactive Hotspots over the two frosted cards in the image -->
       <div class="hero-hotspots">
-        <div class="hero-hotspot" onclick="document.getElementById('maps-section').scrollIntoView({behavior: 'smooth'})" title="Doorstep E-Waste Collection: View Drop-off Centers"></div>
-        <div class="hero-hotspot" onclick="document.getElementById('scan-studio').scrollIntoView({behavior: 'smooth'})" title="IT Product Refurbishment: AI Waste Scanner"></div>
+        <div class="hero-hotspot" onclick="document.getElementById('scan-studio').scrollIntoView({behavior: 'smooth'})" title="AI Waste Scanner: Instant Deep-Learning Classification"></div>
+        <div class="hero-hotspot" onclick="document.getElementById('maps-section').scrollIntoView({behavior: 'smooth'})" title="Smart City Radar: Find Certified E-Waste & Recycling Drop-Offs"></div>
       </div>
     </section>
 
@@ -187,6 +204,64 @@
       </div>
     </section>
 
+    <!-- Interactive Model Test Sandbox (User Uploaded Real Images) -->
+    <section class="test-sandbox-card" id="test-sandbox-section">
+      <div class="sandbox-header">
+        <div class="sandbox-header-left">
+          <span class="sandbox-badge">🧪 Live Test Sandbox</span>
+          <h3>Test Model with Real Sample Images</h3>
+          <p>Click any test image below to evaluate GreenScan's AI classification, preprocessing filters, and recycling recommendations instantly:</p>
+        </div>
+        <span class="sandbox-count-tag">4 New Test Samples Ready</span>
+      </div>
+
+      <div class="test-samples-grid">
+        <div class="test-sample-item" onclick="loadTestSampleImage('/static/img/test_images/crushed_plastic_bottle_sample.jpg', 'crushed_plastic_bottle_sample.jpg')">
+          <div class="sample-img-box">
+            <img src="/static/img/test_images/crushed_plastic_bottle_sample.jpg" alt="Crushed Plastic Bottle">
+            <span class="sample-hover-btn">▶ Test Now</span>
+          </div>
+          <div class="sample-meta">
+            <span class="sample-tag tag-plastic">Plastic PET #1</span>
+            <span class="sample-name">Crushed Plastic Bottle</span>
+          </div>
+        </div>
+
+        <div class="test-sample-item" onclick="loadTestSampleImage('/static/img/test_images/glass_sheet_sample.jpg', 'glass_sheet_sample.jpg')">
+          <div class="sample-img-box">
+            <img src="/static/img/test_images/glass_sheet_sample.jpg" alt="Clear Glass Sheet">
+            <span class="sample-hover-btn">▶ Test Now</span>
+          </div>
+          <div class="sample-meta">
+            <span class="sample-tag tag-glass">Glass Stream</span>
+            <span class="sample-name">Clear Glass Sheet / Pane</span>
+          </div>
+        </div>
+
+        <div class="test-sample-item" onclick="loadTestSampleImage('/static/img/test_images/glass_drinking_tumbler_sample.jpg', 'glass_drinking_tumbler_sample.jpg')">
+          <div class="sample-img-box">
+            <img src="/static/img/test_images/glass_drinking_tumbler_sample.jpg" alt="Glass Drinking Tumblers">
+            <span class="sample-hover-btn">▶ Test Now</span>
+          </div>
+          <div class="sample-meta">
+            <span class="sample-tag tag-glass">Glass Stream</span>
+            <span class="sample-name">Glass Drinking Tumblers</span>
+          </div>
+        </div>
+
+        <div class="test-sample-item" onclick="loadTestSampleImage('/static/img/test_images/organic_vegetables_sample.jpg', 'organic_vegetables_sample.jpg')">
+          <div class="sample-img-box">
+            <img src="/static/img/test_images/organic_vegetables_sample.jpg" alt="Organic Vegetables and Fruits">
+            <span class="sample-hover-btn">▶ Test Now</span>
+          </div>
+          <div class="sample-meta">
+            <span class="sample-tag tag-organic">Organic Compost</span>
+            <span class="sample-name">Fresh Vegetables &amp; Fruits</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Main Live AI Scanning & Inspection Studio -->
     <section class="studio-grid" id="scan-studio">
       <!-- Left: Input Viewport & Preprocessing Inspector -->
@@ -285,9 +360,19 @@
           <div class="ticket-top-controls">
             <div class="ticket-lang-selector">
               <span class="lang-label">🌐 Language:</span>
-              <button class="lang-btn active" data-lang="en">English</button>
-              <button class="lang-btn" data-lang="te">తెలుగు</button>
-              <button class="lang-btn" data-lang="hi">हिंदी</button>
+              <div class="ticket-lang-buttons">
+                <button class="lang-btn active" data-lang="en">English</button>
+                <button class="lang-btn" data-lang="te">తెలుగు</button>
+                <button class="lang-btn" data-lang="hi">हिंदी</button>
+                <button class="lang-btn" data-lang="ta">தமிழ்</button>
+                <button class="lang-btn" data-lang="kn">ಕನ್ನಡ</button>
+                <button class="lang-btn" data-lang="ml">മലയാളം</button>
+                <button class="lang-btn" data-lang="mr">मराठी</button>
+                <button class="lang-btn" data-lang="bn">বাংলা</button>
+                <button class="lang-btn" data-lang="es">Español</button>
+                <button class="lang-btn" data-lang="fr">Français</button>
+                <button class="lang-btn" data-lang="de">Deutsch</button>
+              </div>
             </div>
             <div class="confidence-meter">
               <span class="conf-label" id="ticket-conf-label">Confidence Score</span>
@@ -349,21 +434,44 @@
             </div>
             <label class="check-item">
               <input type="checkbox" class="contam-check">
-              <span>Rinsed and emptied of all liquids/food residue</span>
+              <span id="contam-label-1">Rinsed and emptied of all liquids/food residue</span>
             </label>
             <label class="check-item">
               <input type="checkbox" class="contam-check">
-              <span>External adhesive tape or non-recyclable wraps removed</span>
+              <span id="contam-label-2">External adhesive tape or non-recyclable wraps removed</span>
             </label>
             <label class="check-item">
               <input type="checkbox" class="contam-check">
-              <span>Completely dry to prevent mold in paper/dry bins</span>
+              <span id="contam-label-3">Completely dry to prevent mold in paper/dry bins</span>
             </label>
+          </div>
+
+          <!-- YouTube Recycling & DIY Video Guides -->
+          <div class="ticket-youtube-section" id="ticket-youtube-section">
+            <div class="youtube-section-header">
+              <div class="youtube-header-left">
+                <div class="yt-logo-badge">
+                  <svg width="18" height="18" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                  <span>YouTube</span>
+                </div>
+                <div>
+                  <h4 id="yt-section-title">Recommended Recycling &amp; DIY Videos</h4>
+                  <p class="yt-section-subtitle" id="yt-section-subtitle">Watch how this material is recycled and creative upcycling guides</p>
+                </div>
+              </div>
+              <a href="https://www.youtube.com/results?search_query=how+to+recycle+plastic+bottles" target="_blank" id="yt-search-external-btn" class="yt-search-pill-btn">
+                <span id="yt-search-btn-text">Search More on YouTube</span> ↗
+              </a>
+            </div>
+            
+            <div class="youtube-cards-grid" id="youtube-cards-grid">
+              <!-- Dynamically populated based on category -->
+            </div>
           </div>
 
           <!-- Correct-It Feature (Active Learning Feedback Loop) -->
           <div class="correct-it-section">
-            <div class="correct-it-text">
+            <div class="correct-it-text" id="correct-it-label-text">
               <span>⚠️</span> Wrong prediction? Correct it to train the model:
             </div>
             <select class="correct-select" id="correct-category-select">
@@ -587,6 +695,81 @@ path = kagglehub.<span style="color: #38bdf8;">dataset_download</span>(<span sty
       </div>
     </section>
 
+    <!-- About Us & Engineering Project Team Section -->
+    <section class="about-us-section" id="about-section">
+      <div class="section-header">
+        <div>
+          <h2>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            About Us &amp; Engineering Team
+          </h2>
+          <p>Engineering Design Project (EDP) — Computer Science and Engineering</p>
+        </div>
+        <span class="kaggle-badge" style="background: rgba(16, 185, 129, 0.15); color: #059669; border-color: rgba(16, 185, 129, 0.3);">
+          🎓 EDP Academic Project
+        </span>
+      </div>
+
+      <!-- Core Project Team Members -->
+      <div class="about-team-grid">
+        <!-- Team Member 1: Kruthi -->
+        <div class="team-card">
+          <div class="team-avatar-wrap">
+            <div class="team-avatar-circle" style="background: linear-gradient(135deg, #10b981, #059669);">
+              K
+            </div>
+            <span class="team-badge">Lead Developer</span>
+          </div>
+          <h3>B P S Kruthi</h3>
+          <div class="team-roll">Roll No: <code>24951A05E9</code></div>
+          <div class="team-dept">Dept. of Computer Science &amp; Engineering</div>
+          <p class="team-bio">
+            Led the Computer Vision model pipeline, Kagglehub dataset engineering, interactive UI architecture, real-time prediction heuristics, and gamified sustainability modules.
+          </p>
+        </div>
+
+        <!-- Team Member 2: Lahari -->
+        <div class="team-card">
+          <div class="team-avatar-wrap">
+            <div class="team-avatar-circle" style="background: linear-gradient(135deg, #0284c7, #2563eb);">
+              L
+            </div>
+            <span class="team-badge">Co-Developer</span>
+          </div>
+          <h3>Anreddy Lahari</h3>
+          <div class="team-roll">Roll No: <code>24951A05F0</code></div>
+          <div class="team-dept">Dept. of Computer Science &amp; Engineering</div>
+          <p class="team-bio">
+            Spearheaded multi-language localization (11 languages), YouTube recycling knowledge curation, Google Maps GPS navigation hub, and IEEE conference paper documentation.
+          </p>
+        </div>
+      </div>
+
+      <!-- Core Innovation Pillars -->
+      <div class="about-pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">🧠</div>
+          <h4>Transfer Learning Vision</h4>
+          <p>Trained on Kaggle Garbage Classification dataset with high-precision feature extractors for 6 primary waste streams.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon" style="background: rgba(2, 132, 199, 0.15); color: #0284c7;">🌐</div>
+          <h4>11-Language Engine</h4>
+          <p>Instant localized advice in English, Telugu, Hindi, Tamil, Kannada, Marathi, Gujarati, Bengali, Spanish, French, and German.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">▶️</div>
+          <h4>YouTube Video &amp; Search</h4>
+          <p>Embedded video guides and one-click topic search links to master zero-waste DIY upcycling methods.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">📍</div>
+          <h4>Smart City Navigator</h4>
+          <p>Interactive Google Maps GPS drop-off center locator with turn-by-turn driving directions.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Recent History Log -->
     <section class="history-section" style="background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-card); padding: 24px; margin-bottom: 40px;">
       <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
@@ -621,6 +804,28 @@ path = kagglehub.<span style="color: #38bdf8;">dataset_download</span>(<span sty
       <div style="display: flex; gap: 10px;">
         <button class="btn-outline" style="flex: 1;" onclick="closeNameModal()">Cancel</button>
         <button class="btn-save-name" id="btn-save-name" style="flex: 2;">Save &amp; Claim Rank</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- YouTube Video Player Modal -->
+  <div class="video-modal-backdrop" id="video-modal" style="display: none;">
+    <div class="video-modal-card">
+      <div class="video-modal-header">
+        <div class="video-modal-title-box">
+          <span style="font-size: 1.2rem;">▶️</span>
+          <h3 id="video-modal-title">Recycling Video Tutorial</h3>
+        </div>
+        <button class="btn-close-modal" id="video-modal-close" aria-label="Close video" onclick="closeVideoModal()">&times;</button>
+      </div>
+      <div class="video-modal-player-container">
+        <iframe id="video-modal-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="video-modal-footer">
+        <span class="video-channel-tag" id="video-modal-channel">GreenScan Curated Video</span>
+        <a href="#" target="_blank" id="video-modal-external-link" class="btn-open-yt">
+          Watch on YouTube ↗
+        </a>
       </div>
     </div>
   </div>

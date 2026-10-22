@@ -320,9 +320,43 @@ function setupEventListeners() {
       const lang = btn.getAttribute("data-lang");
       state.currentLang = lang;
       localStorage.setItem("greenscan_lang", lang);
+      const headerSelect = document.getElementById("header-lang-select");
+      if (headerSelect) headerSelect.value = lang;
       applyMultilingualToTicket();
       showToast(`Language changed to ${btn.textContent}`);
     });
+  });
+
+  // Header Global Language Dropdown
+  const headerLangSelect = document.getElementById("header-lang-select");
+  if (headerLangSelect) {
+    headerLangSelect.value = state.currentLang || "en";
+    headerLangSelect.addEventListener("change", (e) => {
+      const lang = e.target.value;
+      state.currentLang = lang;
+      localStorage.setItem("greenscan_lang", lang);
+      document.querySelectorAll(".lang-btn").forEach(b => {
+        b.classList.toggle("active", b.getAttribute("data-lang") === lang);
+      });
+      applyMultilingualToTicket();
+      const selectedOption = headerLangSelect.options[headerLangSelect.selectedIndex];
+      showToast(`Language changed to ${selectedOption ? selectedOption.text : lang}`);
+    });
+  }
+
+  // Video Modal backdrop & close handlers
+  const videoModal = document.getElementById("video-modal");
+  const videoModalClose = document.getElementById("video-modal-close");
+  videoModal?.addEventListener("click", (e) => {
+    if (e.target === videoModal) {
+      closeVideoModal();
+    }
+  });
+  videoModalClose?.addEventListener("click", closeVideoModal);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && videoModal && videoModal.style.display !== "none") {
+      closeVideoModal();
+    }
   });
 
   // Correct-It Dropdown with REAL-TIME REFITTING
@@ -332,6 +366,18 @@ function setupEventListeners() {
     if (newCat) {
       applyRealtimeCorrection(newCat);
     }
+  });
+
+  // Wastedex Card Click to view category guides & YouTube videos
+  document.querySelectorAll(".wastedex-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const cat = card.getAttribute("data-category");
+      if (cat) {
+        simulateSmartClassification(`${cat}_sample.jpg`);
+        document.getElementById("scan-studio")?.scrollIntoView({ behavior: "smooth" });
+        showToast(`Loaded ${cat.toUpperCase()} disposal instructions & YouTube tutorials!`);
+      }
+    });
   });
 
   // Name Modal events
@@ -574,8 +620,11 @@ function renderClassificationResult(data) {
   // Direct Nearest Drop-off Center based on this exact scanned category
   updateMatchedNearbyCenter(data.category);
 
-  // Apply Multilingual guidance (English, Telugu, Hindi)
+  // Apply Multilingual guidance (11 Languages)
   applyMultilingualToTicket();
+
+  // Render YouTube Recycling Video Suggestions
+  renderYouTubeSuggestions(data.category);
 
   // Reset Contamination Checkboxes
   document.querySelectorAll(".contam-check").forEach(c => c.checked = false);
@@ -679,8 +728,6 @@ function scrollToMapsAndSelect() {
 
 // Multilingual Application Engine for Ticket
 function applyMultilingualToTicket() {
-  if (!state.currentResult) return;
-  const cat = state.currentResult.category;
   const lang = state.currentLang || "en";
 
   // Check language buttons active state
@@ -688,12 +735,21 @@ function applyMultilingualToTicket() {
     btn.classList.toggle("active", btn.getAttribute("data-lang") === lang);
   });
 
+  // Sync header language selector
+  const headerSelect = document.getElementById("header-lang-select");
+  if (headerSelect && headerSelect.value !== lang) {
+    headerSelect.value = lang;
+  }
+
+  if (!state.currentResult) return;
+  const cat = state.currentResult.category;
+
   const translation = (typeof getGreenScanTranslation === 'function') 
     ? getGreenScanTranslation(cat, lang)
     : { data: CategoryLibrary[cat] || CategoryLibrary.plastic, ui: {} };
 
-  const d = translation.data;
-  const ui = translation.ui;
+  const d = translation.data || CategoryLibrary[cat] || CategoryLibrary.plastic;
+  const ui = translation.ui || {};
 
   // Update Title and Bin
   if (ticketItemName) ticketItemName.textContent = d.name;
@@ -719,10 +775,22 @@ function applyMultilingualToTicket() {
   // Update Fact
   if (ticketFactText) ticketFactText.textContent = d.fact;
 
-  // Update Contamination Title
+  // Update Contamination Title & Checklist items
   const contamTitle = document.getElementById("contamination-check-title");
   if (contamTitle && ui.contamination_title) {
     contamTitle.innerHTML = `<span>🛡️</span> ${ui.contamination_title} (+25 XP)`;
+  }
+  const contamLabel1 = document.getElementById("contam-label-1");
+  const contamLabel2 = document.getElementById("contam-label-2");
+  const contamLabel3 = document.getElementById("contam-label-3");
+  if (contamLabel1 && ui.contam_1) contamLabel1.textContent = ui.contam_1;
+  if (contamLabel2 && ui.contam_2) contamLabel2.textContent = ui.contam_2;
+  if (contamLabel3 && ui.contam_3) contamLabel3.textContent = ui.contam_3;
+
+  // Update Correct-It Guidance Text
+  const correctItText = document.getElementById("correct-it-label-text");
+  if (correctItText && ui.correct_it_label) {
+    correctItText.innerHTML = `<span>⚠️</span> ${ui.correct_it_label}`;
   }
 
   // Update Navigation Button Text
@@ -734,7 +802,132 @@ function applyMultilingualToTicket() {
   if (radarBtnText && ui.view_on_radar_btn) {
     radarBtnText.textContent = ui.view_on_radar_btn;
   }
+
+  // Update YouTube Video Section UI text & re-render cards
+  const ytTitle = document.getElementById("yt-section-title");
+  const ytSubtitle = document.getElementById("yt-section-subtitle");
+  const ytSearchBtnText = document.getElementById("yt-search-btn-text");
+  if (ytTitle && ui.yt_title) ytTitle.textContent = ui.yt_title;
+  if (ytSubtitle && ui.yt_subtitle) ytSubtitle.textContent = ui.yt_subtitle;
+  if (ytSearchBtnText && ui.search_yt_btn) ytSearchBtnText.textContent = ui.search_yt_btn;
+
+  renderYouTubeSuggestions(cat);
 }
+
+// ====================================================================
+// YOUTUBE RECYCLING VIDEO SUGGESTIONS ENGINE
+// ====================================================================
+function renderYouTubeSuggestions(category) {
+  const cat = (category || "plastic").toLowerCase();
+  const grid = document.getElementById("youtube-cards-grid");
+  if (!grid) return;
+
+  const videos = (typeof getYouTubeRecyclingVideos === 'function')
+    ? getYouTubeRecyclingVideos(cat)
+    : (window.RECYCLING_YOUTUBE_VIDEOS ? window.RECYCLING_YOUTUBE_VIDEOS[cat] : []);
+
+  const lang = state.currentLang || "en";
+  const tr = (typeof getGreenScanTranslation === 'function') 
+    ? getGreenScanTranslation(cat, lang)
+    : { ui: {}, yt_query: "how to recycle" };
+
+  const ui = tr.ui || {};
+  const watchBtnText = ui.watch_yt_btn || "Watch Video";
+
+  // Build localized YouTube search URL
+  const searchBtn = document.getElementById("yt-search-external-btn");
+  if (searchBtn) {
+    const query = `${cat} ${tr.yt_query || "how to recycle step by step"}`;
+    searchBtn.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+  }
+
+  if (!videos || videos.length === 0) {
+    grid.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem;">No videos available for this category.</p>`;
+    return;
+  }
+
+  grid.innerHTML = videos.map(v => {
+    const escapedTitle = (v.title || "").replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+    const escapedChannel = (v.channel || "").replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+    const searchTopic = v.search_query || v.title;
+    const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(searchTopic)}`;
+    return `
+      <div class="yt-video-card" data-video-id="${v.id}">
+        <div class="yt-thumb-wrapper" onclick="openVideoModal('${v.id}', '${escapedTitle}', '${escapedChannel}')">
+          <img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" alt="${escapedTitle}" class="yt-thumb-img" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/0.jpg'">
+          <div class="yt-play-overlay">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="yt-duration-pill">${v.duration || "4:00"}</span>
+        </div>
+        <div class="yt-card-body">
+          <div class="yt-card-meta">
+            <span class="yt-channel-tag">${v.channel}</span>
+            <span class="yt-badge-tag" style="background-color: ${v.badge_color || '#ef4444'};">${v.tag || 'Recycling'}</span>
+          </div>
+          <h5 class="yt-card-title" title="${escapedTitle}">${v.title}</h5>
+          <p class="yt-card-desc">${v.desc || ''}</p>
+          <div class="yt-card-actions">
+            <button class="btn-watch-yt" onclick="openVideoModal('${v.id}', '${escapedTitle}', '${escapedChannel}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+              <span>${watchBtnText}</span>
+            </button>
+            <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="btn-search-topic-yt" title="Search '${searchTopic}' on YouTube">
+              <span>🔍 Search Topic</span>
+            </a>
+            <a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer" class="btn-open-yt-external" title="Open directly on YouTube">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function openVideoModal(videoId, title, channel) {
+  const modal = document.getElementById("video-modal");
+  const iframe = document.getElementById("video-modal-iframe");
+  const titleEl = document.getElementById("video-modal-title");
+  const channelEl = document.getElementById("video-modal-channel");
+  const linkEl = document.getElementById("video-modal-external-link");
+
+  if (!modal || !iframe) return;
+
+  if (titleEl) titleEl.textContent = title || "Recycling Tutorial";
+  if (channelEl) channelEl.textContent = channel ? `Source: ${channel}` : "YouTube Verified Video";
+  if (linkEl) linkEl.href = `https://www.youtube.com/watch?v=${videoId}`;
+
+  // Use standard YouTube embed with autoplay enabled
+  iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1`;
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden"; // Prevent background scrolling
+}
+
+function loadTestSampleImage(imgSrc, filename) {
+  if (previewImg) previewImg.src = imgSrc;
+  if (dropZone) dropZone.classList.add("has-image");
+  switchMode('upload');
+  document.getElementById("scan-studio")?.scrollIntoView({ behavior: 'smooth' });
+  showToast(`Testing model with ${filename}...`);
+  simulateSmartClassification(filename);
+}
+
+// Expose modal and test functions to window for inline onclicks
+window.loadTestSampleImage = loadTestSampleImage;
+
+function closeVideoModal() {
+  const modal = document.getElementById("video-modal");
+  const iframe = document.getElementById("video-modal-iframe");
+  if (modal) modal.style.display = "none";
+  if (iframe) iframe.src = ""; // Stop video playback immediately
+  document.body.style.overflow = "";
+}
+
+// Expose modal functions to window for inline onclicks
+window.openVideoModal = openVideoModal;
+window.closeVideoModal = closeVideoModal;
+window.renderYouTubeSuggestions = renderYouTubeSuggestions;
 
 // ====================================================================
 // REAL-TIME REFITTING WHEN USER CORRECTS PREDICTION
@@ -771,6 +964,9 @@ function applyRealtimeCorrection(correctedCat) {
   // Apply multilingual text in currently active language
   applyMultilingualToTicket();
   setupQuiz(catData.quiz);
+
+  // Re-render YouTube suggestions for the corrected category
+  renderYouTubeSuggestions(correctedCat);
 
   // 3. Unlock in Wastedex
   if (!state.unlockedCategories.includes(correctedCat)) {
