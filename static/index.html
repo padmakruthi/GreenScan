@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800;1,900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/static/css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♻️</text></svg>">
 </head>
 <body>
@@ -21,7 +21,7 @@
       <a href="#" class="brand-container">
         <div class="brand-icon-box">
           <!-- 3D Geometric Recycle Leaf SVG -->
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="7 10 12 15 17 10"></polyline>
             <path d="M12 15V3"></path>
             <path d="M21 16.5A6.5 6.5 0 0 1 10.5 21"></path>
@@ -31,35 +31,47 @@
         <div class="brand-title">
           GREEN<span>SCAN</span>
         </div>
-        <span class="tagline-pill">Point. Learn. Recycle.</span>
       </a>
 
-      <nav>
+      <nav class="header-nav">
         <ul class="nav-links">
-          <li><a href="#scan-studio" class="active">AI Scanner</a></li>
-          <li><a href="#test-sandbox-section">Test Samples</a></li>
-          <li><a href="#wastedex-section">3D Wastedex</a></li>
-          <li><a href="#maps-section">Google Maps Radar</a></li>
+          <li><a href="#scan-studio" class="active">Scanner</a></li>
+          <li><a href="#test-sandbox-section">Sandbox</a></li>
+          <li><a href="#wastedex-section">Wastedex</a></li>
+          <li><a href="#maps-section">Radar</a></li>
           <li><a href="#leaderboard-section">Leaderboard</a></li>
-          <li><a href="#about-section">About Us</a></li>
+          <li><a href="#about-section">About</a></li>
         </ul>
       </nav>
 
       <div class="header-actions">
+        <!-- Voice Over Narration Toggle -->
+        <button class="btn-voice-toggle" id="voice-toggle" title="Toggle Voice Over Announcements" aria-label="Toggle Voice Over">
+          <span class="voice-icon-box" id="voice-icon">🔊</span>
+          <span class="voice-label" id="voice-label">Voice ON</span>
+        </button>
+
+        <!-- Header EcoCoins & Shop Now Button (Polished & Spacious) -->
+        <button class="btn-header-shop" id="btn-header-shop" title="Redeem EcoCoins in EcoRewards Store" onclick="document.getElementById('eco-shop-section').scrollIntoView({behavior: 'smooth'})">
+          <span class="coin-icon">🪙</span>
+          <span class="coin-amount" id="header-ecocoins-count">380</span>
+          <span class="shop-btn-label">Shop Now</span>
+        </button>
+
         <!-- Global Language Selector (11 Languages) -->
         <div class="header-lang-wrapper">
           <select class="header-lang-select" id="header-lang-select" title="Change Language">
-            <option value="en">🌐 English</option>
-            <option value="te">తెలుగు (Telugu)</option>
-            <option value="hi">हिंदी (Hindi)</option>
-            <option value="ta">தமிழ் (Tamil)</option>
-            <option value="kn">ಕನ್ನಡ (Kannada)</option>
-            <option value="ml">മലയാളം (Malayalam)</option>
-            <option value="mr">मराठी (Marathi)</option>
-            <option value="bn">বাংলা (Bengali)</option>
-            <option value="es">Español (Spanish)</option>
-            <option value="fr">Français (French)</option>
-            <option value="de">Deutsch (German)</option>
+            <option value="en">🌐 EN</option>
+            <option value="te">తెలుగు (TE)</option>
+            <option value="hi">हिंदी (HI)</option>
+            <option value="ta">தமிழ் (TA)</option>
+            <option value="kn">ಕನ್ನಡ (KN)</option>
+            <option value="ml">മലയാളം (ML)</option>
+            <option value="mr">मराठी (MR)</option>
+            <option value="bn">বাংলা (BN)</option>
+            <option value="es">ES</option>
+            <option value="fr">FR</option>
+            <option value="de">DE</option>
           </select>
         </div>
 
@@ -77,17 +89,12 @@
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
           </svg>
         </button>
-
-        <a href="#scan-studio" class="btn-cta-green">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-          Quick Scan
-        </a>
       </div>
     </header>
 
     <!-- Hero Section (Matches Reference Image Exactly: Clean Industrial Pipeline, No Duplicate Text, No SDG Clutter) -->
     <section class="hero-outer-card">
-      <img src="img/hero_banner.png" alt="Smart Recycling Hero Banner" class="hero-banner-main">
+      <img src="/static/img/hero_banner.png" alt="Smart Recycling Hero Banner" class="hero-banner-main">
       
       <!-- Interactive Hotspots over the two frosted cards in the image -->
       <div class="hero-hotspots">
@@ -163,6 +170,17 @@
 
     <!-- Gamification & Impact Overview Bar -->
     <section class="gamification-impact-grid" id="impact-section">
+      <div class="metric-card metric-card-ecocoins" onclick="document.getElementById('eco-shop-section').scrollIntoView({behavior: 'smooth'})" title="Click to Redeem EcoCoins in Eco Store">
+        <div class="metric-icon-box" style="background: #fef3c7; color: #b45309;">
+          <span style="font-size: 26px; line-height: 1;">🪙</span>
+        </div>
+        <div class="metric-info">
+          <h3 id="stat-ecocoins">380 Coins</h3>
+          <p>Redeemable EcoCoins</p>
+        </div>
+        <span class="metric-shop-badge">Shop Now →</span>
+      </div>
+
       <div class="metric-card">
         <div class="metric-icon-box" style="background: #fef3c7; color: #b45309;">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
@@ -212,13 +230,24 @@
           <h3>Test Model with Real Sample Images</h3>
           <p>Click any test image below to evaluate GreenScan's AI classification, preprocessing filters, and recycling recommendations instantly:</p>
         </div>
-        <span class="sandbox-count-tag">4 New Test Samples Ready</span>
+        <span class="sandbox-count-tag">5 Real Test Samples Ready</span>
       </div>
 
       <div class="test-samples-grid">
-        <div class="test-sample-item" onclick="loadTestSampleImage('img/test_images/crushed_plastic_bottle_sample.jpg', 'crushed_plastic_bottle_sample.jpg')">
+        <div class="test-sample-item" onclick="loadTestSampleImage('/static/img/test_images/ewaste_laptops_sample.jpg', 'ewaste_laptops_circuit_keyboards.jpg')">
           <div class="sample-img-box">
-            <img src="img/test_images/crushed_plastic_bottle_sample.jpg" alt="Crushed Plastic Bottle">
+            <img src="/static/img/test_images/ewaste_laptops_sample.jpg" alt="Electronic Waste Laptops and PCBs">
+            <span class="sample-hover-btn">▶ Test Now</span>
+          </div>
+          <div class="sample-meta">
+            <span class="sample-tag" style="background: rgba(234, 88, 12, 0.15); color: #ea580c; border: 1px solid rgba(234, 88, 12, 0.3);">Hazardous E-Waste</span>
+            <span class="sample-name">Discarded Laptops &amp; PCBs</span>
+          </div>
+        </div>
+
+        <div class="test-sample-item" onclick="loadTestSampleImage('/static/img/test_images/crushed_plastic_bottle_sample.jpg', 'crushed_plastic_bottle_sample.jpg')">
+          <div class="sample-img-box">
+            <img src="/static/img/test_images/crushed_plastic_bottle_sample.jpg" alt="Crushed Plastic Bottle">
             <span class="sample-hover-btn">▶ Test Now</span>
           </div>
           <div class="sample-meta">
@@ -227,9 +256,9 @@
           </div>
         </div>
 
-        <div class="test-sample-item" onclick="loadTestSampleImage('img/test_images/glass_sheet_sample.jpg', 'glass_sheet_sample.jpg')">
+        <div class="test-sample-item" onclick="loadTestSampleImage('/static/img/test_images/glass_sheet_sample.jpg', 'glass_sheet_sample.jpg')">
           <div class="sample-img-box">
-            <img src="img/test_images/glass_sheet_sample.jpg" alt="Clear Glass Sheet">
+            <img src="/static/img/test_images/glass_sheet_sample.jpg" alt="Clear Glass Sheet">
             <span class="sample-hover-btn">▶ Test Now</span>
           </div>
           <div class="sample-meta">
@@ -238,9 +267,9 @@
           </div>
         </div>
 
-        <div class="test-sample-item" onclick="loadTestSampleImage('img/test_images/glass_drinking_tumbler_sample.jpg', 'glass_drinking_tumbler_sample.jpg')">
+        <div class="test-sample-item" onclick="loadTestSampleImage('/static/img/test_images/glass_drinking_tumbler_sample.jpg', 'glass_drinking_tumbler_sample.jpg')">
           <div class="sample-img-box">
-            <img src="img/test_images/glass_drinking_tumbler_sample.jpg" alt="Glass Drinking Tumblers">
+            <img src="/static/img/test_images/glass_drinking_tumbler_sample.jpg" alt="Glass Drinking Tumblers">
             <span class="sample-hover-btn">▶ Test Now</span>
           </div>
           <div class="sample-meta">
@@ -249,9 +278,9 @@
           </div>
         </div>
 
-        <div class="test-sample-item" onclick="loadTestSampleImage('img/test_images/organic_vegetables_sample.jpg', 'organic_vegetables_sample.jpg')">
+        <div class="test-sample-item" onclick="loadTestSampleImage('/static/img/test_images/organic_vegetables_sample.jpg', 'organic_vegetables_sample.jpg')">
           <div class="sample-img-box">
-            <img src="img/test_images/organic_vegetables_sample.jpg" alt="Organic Vegetables and Fruits">
+            <img src="/static/img/test_images/organic_vegetables_sample.jpg" alt="Organic Vegetables and Fruits">
             <span class="sample-hover-btn">▶ Test Now</span>
           </div>
           <div class="sample-meta">
@@ -531,37 +560,37 @@ path = kagglehub.<span style="color: #38bdf8;">dataset_download</span>(<span sty
       <!-- Real Dataset Sample Thumbnails from actual local dataset cache -->
       <div class="dataset-sample-grid">
         <div class="dataset-sample-card">
-          <img src="img/dataset_samples/cardboard_sample.jpg" alt="Cardboard Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <img src="/static/img/dataset_samples/cardboard_sample.jpg" alt="Cardboard Sample" class="dataset-sample-thumb" onerror="this.src='/static/img/hero_banner.png'">
           <div class="cls-name">Cardboard</div>
           <div class="cls-count">403 Images</div>
         </div>
 
         <div class="dataset-sample-card">
-          <img src="img/dataset_samples/glass_sample.jpg" alt="Glass Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <img src="/static/img/dataset_samples/glass_sample.jpg" alt="Glass Sample" class="dataset-sample-thumb" onerror="this.src='/static/img/hero_banner.png'">
           <div class="cls-name">Glass</div>
           <div class="cls-count">501 Images</div>
         </div>
 
         <div class="dataset-sample-card">
-          <img src="img/dataset_samples/metal_sample.jpg" alt="Metal Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <img src="/static/img/dataset_samples/metal_sample.jpg" alt="Metal Sample" class="dataset-sample-thumb" onerror="this.src='/static/img/hero_banner.png'">
           <div class="cls-name">Metal</div>
           <div class="cls-count">410 Images</div>
         </div>
 
         <div class="dataset-sample-card">
-          <img src="img/dataset_samples/paper_sample.jpg" alt="Paper Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <img src="/static/img/dataset_samples/paper_sample.jpg" alt="Paper Sample" class="dataset-sample-thumb" onerror="this.src='/static/img/hero_banner.png'">
           <div class="cls-name">Paper</div>
           <div class="cls-count">594 Images</div>
         </div>
 
         <div class="dataset-sample-card">
-          <img src="img/dataset_samples/plastic_sample.jpg" alt="Plastic Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <img src="/static/img/dataset_samples/plastic_sample.jpg" alt="Plastic Sample" class="dataset-sample-thumb" onerror="this.src='/static/img/hero_banner.png'">
           <div class="cls-name">Plastic</div>
           <div class="cls-count">482 Images</div>
         </div>
 
         <div class="dataset-sample-card">
-          <img src="img/dataset_samples/trash_sample.jpg" alt="Trash Sample" class="dataset-sample-thumb" onerror="this.src='img/hero_banner.png'">
+          <img src="/static/img/dataset_samples/trash_sample.jpg" alt="Trash Sample" class="dataset-sample-thumb" onerror="this.src='/static/img/hero_banner.png'">
           <div class="cls-name">Organic / Trash</div>
           <div class="cls-count">137 Images</div>
         </div>
@@ -614,6 +643,50 @@ path = kagglehub.<span style="color: #38bdf8;">dataset_download</span>(<span sty
           <h4>E-Waste</h4>
           <span class="count-pill">Locked 🔒</span>
         </div>
+      </div>
+    </section>
+
+    <!-- EcoRewards "Shop Now" Store Section (Redeem Gained EcoCoins) -->
+    <section class="eco-shop-section" id="eco-shop-section">
+      <div class="eco-shop-header-card">
+        <div class="shop-header-main">
+          <div class="shop-header-title-box">
+            <span class="shop-badge-pill">🛍️ Circular Marketplace</span>
+            <h2>EcoRewards Store &amp; EcoCoins Redemption</h2>
+            <p>Exchange the EcoCoins you've earned from smart recycling for verified tree planting, zero-waste gear, clean transit passes, and certified badges.</p>
+          </div>
+          <div class="shop-balance-widget">
+            <div class="balance-title">Available EcoCoins</div>
+            <div class="balance-count-wrap">
+              <span class="balance-coin-icon">🪙</span>
+              <span class="balance-number" id="shop-balance-number">380</span>
+              <span class="balance-tag">EcoCoins</span>
+            </div>
+            <div class="shop-quick-actions">
+              <button class="btn-shop-vouchers" id="btn-open-my-vouchers" onclick="openMyVouchersModal()">
+                <span>🎟️</span> My Vouchers (<span id="my-vouchers-badge">0</span>)
+              </button>
+              <button class="btn-earn-more-coins" onclick="document.getElementById('scan-studio').scrollIntoView({behavior: 'smooth'})">
+                <span>⚡</span> Earn +40 Coins
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shop Category Filter Tabs -->
+        <div class="shop-tabs-row">
+          <button class="shop-tab-btn active" data-filter="all">All Rewards (8)</button>
+          <button class="shop-tab-btn" data-filter="impact">🌱 Real Impact</button>
+          <button class="shop-tab-btn" data-filter="products">🎋 Zero-Waste Gear</button>
+          <button class="shop-tab-btn" data-filter="perks">☕ Food &amp; Perks</button>
+          <button class="shop-tab-btn" data-filter="mobility">🚌 Clean Transit</button>
+          <button class="shop-tab-btn" data-filter="digital">🎖️ Certificates</button>
+        </div>
+      </div>
+
+      <!-- Dynamic Shop Products Grid -->
+      <div class="eco-shop-grid" id="eco-shop-grid">
+        <!-- Dynamically rendered via JavaScript -->
       </div>
     </section>
 
@@ -830,12 +903,60 @@ path = kagglehub.<span style="color: #38bdf8;">dataset_download</span>(<span sty
     </div>
   </div>
 
+  <!-- Floating Voice-Over Notification Popup Container -->
+  <div id="greenscan-popup-container" class="popup-container" aria-live="polite"></div>
+
+  <!-- Reward Redeemed / Voucher Modal -->
+  <div class="video-modal-backdrop" id="voucher-modal" style="display: none;">
+    <div class="voucher-modal-card">
+      <div class="voucher-celebration-bubble" id="voucher-modal-icon">🎉</div>
+      <h3 id="voucher-modal-title">Reward Claimed!</h3>
+      <p class="voucher-subtitle" id="voucher-modal-partner">GreenScan Eco Partner Voucher</p>
+      
+      <div class="voucher-code-display-box">
+        <span class="voucher-code-label">Your Unique Voucher Code</span>
+        <span class="voucher-code-string" id="voucher-modal-code">GS-TREE-7892</span>
+        <button class="btn-copy-voucher-code" id="btn-copy-code" onclick="copyVoucherCode()">
+          <span>📋</span> Copy Voucher Code
+        </button>
+      </div>
+
+      <div class="voucher-meta-info" id="voucher-modal-instructions">
+        Show this voucher code at partner checkout or paste online to redeem your reward. Valid for 30 days.
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-outline" style="flex: 1;" onclick="closeVoucherModal()">Close</button>
+        <button class="btn-cta-green" style="flex: 1;" onclick="closeVoucherModal(); openMyVouchersModal();">View All Vouchers</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Redeemed Vouchers List Drawer Modal -->
+  <div class="video-modal-backdrop" id="my-vouchers-modal" style="display: none;">
+    <div class="voucher-modal-card" style="max-width: 580px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <div style="text-align: left;">
+          <h3 style="margin-bottom: 4px;">My Redeemed Vouchers</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">All active rewards claimed with your EcoCoins</p>
+        </div>
+        <button class="btn-close-modal" onclick="closeMyVouchersModal()">&times;</button>
+      </div>
+
+      <div class="my-vouchers-list" id="my-vouchers-list">
+        <!-- Dynamic vouchers loaded from storage/API -->
+      </div>
+
+      <button class="btn-cta-green" style="width: 100%;" onclick="closeMyVouchersModal()">Back to Eco Store</button>
+    </div>
+  </div>
+
   <!-- Handcrafted 3D Vector SVG Icons Engine -->
-  <script src="js/icons.js"></script>
+  <script src="/static/js/icons.js"></script>
   <!-- Multilingual Waste Guidance Engine (English, Telugu, Hindi) -->
-  <script src="js/translations.js"></script>
+  <script src="/static/js/translations.js"></script>
   <!-- JavaScript Engine -->
-  <script src="js/app.js"></script>
+  <script src="/static/js/app.js"></script>
   <script>
     // Inject the handcrafted 3D SVG icons into the category strip on page load
     document.addEventListener("DOMContentLoaded", () => {

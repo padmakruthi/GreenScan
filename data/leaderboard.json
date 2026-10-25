@@ -1,27 +1,35 @@
 [
   {
-    "name": "Kruthi",
+    "name": "padma",
     "badge": "🥇 Eco Champion",
-    "xp": 2610,
-    "items": 58,
+    "xp": 3475,
+    "items": 74,
     "streak": 5,
     "rank": 1
   },
   {
-    "name": "B P S Kruthi",
+    "name": "Kruthi",
     "badge": "🥈 Green Pioneer",
-    "xp": 380,
-    "items": 26,
+    "xp": 3200,
+    "items": 69,
     "streak": 5,
     "rank": 2
   },
   {
-    "name": "Anreddy Lahari",
+    "name": "B P S Kruthi",
     "badge": "🥉 Zero Waste Hero",
+    "xp": 1180,
+    "items": 46,
+    "streak": 5,
+    "rank": 3
+  },
+  {
+    "name": "Anreddy Lahari",
+    "badge": "🌱 Sorter Pro",
     "xp": 340,
     "items": 22,
     "streak": 4,
-    "rank": 3
+    "rank": 4
   },
   {
     "name": "SmartCity_Hyd",
@@ -29,7 +37,7 @@
     "xp": 280,
     "items": 19,
     "streak": 3,
-    "rank": 4
+    "rank": 5
   },
   {
     "name": "EcoWarrior_07",
@@ -37,7 +45,7 @@
     "xp": 210,
     "items": 14,
     "streak": 2,
-    "rank": 5
+    "rank": 6
   },
   {
     "name": "Circular_Agent",
@@ -45,6 +53,6 @@
     "xp": 160,
     "items": 11,
     "streak": 2,
-    "rank": 6
+    "rank": 7
   }
 ]

@@ -29,6 +29,122 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 HISTORY_FILE = os.path.join(DATA_DIR, "history.json")
 FEEDBACK_FILE = os.path.join(DATA_DIR, "corrections.json")
 LEADERBOARD_FILE = os.path.join(DATA_DIR, "leaderboard.json")
+VOUCHERS_FILE = os.path.join(DATA_DIR, "vouchers.json")
+
+SHOP_CATALOG = [
+    {
+        "id": "tree_mangrove",
+        "title": "Plant a Native Tree in Hyderabad",
+        "category": "impact",
+        "cost": 150,
+        "icon": "🌱",
+        "image": "/static/img/rewards/tree_sapling.jpg",
+        "partner": "Telangana Haritha Haram & Green India",
+        "description": "GreenScan sponsors planting 1 geo-tagged native sapling (Neem/Gulmohar) with periodic growth updates.",
+        "badge": "Real Impact",
+        "voucher_prefix": "TREE",
+        "instructions": "Your sapling tree id is registered with Telangana Forest Dept. Certificate will be delivered to your profile.",
+        "discount": "1 Tree Planted"
+    },
+    {
+        "id": "bamboo_kit",
+        "title": "20% Off Eco Bamboo Kit & Stainless Bottle",
+        "category": "products",
+        "cost": 100,
+        "icon": "🎋",
+        "image": "/static/img/rewards/bamboo_kit.jpg",
+        "partner": "EcoLife Sustainable Essentials",
+        "description": "Premium 4-piece bamboo cutlery set, travel pouch, and double-walled insulated stainless steel flask.",
+        "badge": "Popular",
+        "voucher_prefix": "BAMBOO",
+        "instructions": "Apply coupon code at checkout on EcoLife Essentials website for flat 20% discount.",
+        "discount": "20% Discount"
+    },
+    {
+        "id": "organic_cafe",
+        "title": "Free Organic Fair-Trade Coffee Voucher",
+        "category": "perks",
+        "cost": 80,
+        "icon": "☕",
+        "image": "/static/img/rewards/organic_coffee.jpg",
+        "partner": "Roast & Roots Organic Cafe",
+        "description": "Enjoy one complimentary barista-brewed artisanal organic coffee or matcha tea in a zero-waste reusable mug.",
+        "badge": "Hot Perk",
+        "voucher_prefix": "CAFE",
+        "instructions": "Present the digital QR / alphanumeric voucher code at the barista counter.",
+        "discount": "1 Free Drink"
+    },
+    {
+        "id": "cotton_tote",
+        "title": "100% Recycled Cotton Heavyweight Tote Bag",
+        "category": "products",
+        "cost": 120,
+        "icon": "🎒",
+        "image": "/static/img/rewards/cotton_tote.jpg",
+        "partner": "Circular Fashion Co.",
+        "description": "Durable, washable shopping bag woven from 100% recovered post-consumer cotton and ocean-bound plastics.",
+        "badge": "Zero Plastic",
+        "voucher_prefix": "TOTE",
+        "instructions": "Redeem for 100% discount with free home dispatch via partner courier.",
+        "discount": "1 Free Bag"
+    },
+    {
+        "id": "green_transit",
+        "title": "Smart City Green Transit 1-Day Pass",
+        "category": "mobility",
+        "cost": 60,
+        "icon": "🚌",
+        "image": "/static/img/rewards/green_transit.jpg",
+        "partner": "Hyderabad Metro & TSRTC EV Fleet",
+        "description": "Unlimited 24-hour electric bus and metro rail transit pass across all Smart City urban corridors.",
+        "badge": "Zero Emission",
+        "voucher_prefix": "METRO",
+        "instructions": "Enter token in the Smart Transit App or scan QR ticket at metro turnstile.",
+        "discount": "Free Day Pass"
+    },
+    {
+        "id": "zero_waste_cert",
+        "title": "Official 'Zero Waste Legend' EDP Certificate",
+        "category": "digital",
+        "cost": 200,
+        "icon": "🎖️",
+        "image": "/static/img/rewards/edp_certificate.jpg",
+        "partner": "GreenScan EDP Research Project",
+        "description": "Verified digital recognition signed by B P S Kruthi & Anreddy Lahari, certified for your academic portfolio.",
+        "badge": "EDP Certified",
+        "voucher_prefix": "CERT",
+        "instructions": "Digital credential issued with cryptographic authenticity hash.",
+        "discount": "Official Badge"
+    },
+    {
+        "id": "solar_credit",
+        "title": "5 kWh Community Solar Energy Offset",
+        "category": "impact",
+        "cost": 250,
+        "icon": "⚡",
+        "image": "/static/img/rewards/solar_offset.jpg",
+        "partner": "CleanGrid Smart Solar Initiative",
+        "description": "Diverts 5 kilowatt-hours of clean solar generation into municipal EV charging stations in your name.",
+        "badge": "Clean Energy",
+        "voucher_prefix": "SOLAR",
+        "instructions": "Credits assigned directly to Smart City Renewable Registry with public recognition.",
+        "discount": "5 kWh Clean Power"
+    },
+    {
+        "id": "organic_soap",
+        "title": "Zero-Waste Organic Soap & Shampoo Bar",
+        "category": "products",
+        "cost": 90,
+        "icon": "🧼",
+        "image": "/static/img/rewards/organic_soap.jpg",
+        "partner": "WildEarth Botanicals",
+        "description": "Cold-pressed, plastic-free personal care bar crafted from organic neem, aloe vera, and essential oils.",
+        "badge": "Eco Living",
+        "voucher_prefix": "SOAP",
+        "instructions": "Use voucher code for free sample bar shipped in compostable packaging.",
+        "discount": "1 Free Bar"
+    }
+]
 
 os.makedirs(DATA_DIR, exist_ok=True)
 
@@ -221,6 +337,71 @@ def scan_history():
         
     return jsonify(history)
 
+@app.route("/api/shop/catalog", methods=["GET"])
+def shop_catalog():
+    return jsonify({
+        "success": True,
+        "catalog": SHOP_CATALOG
+    })
+
+@app.route("/api/shop/redeem", methods=["POST"])
+def redeem_reward():
+    import random, string
+    data = request.get_json() or {}
+    reward_id = data.get("reward_id")
+    user_name = (data.get("user_name") or "Eco Warrior").strip()
+    user_coins = int(data.get("eco_coins", 0))
+
+    reward = next((r for r in SHOP_CATALOG if r["id"] == reward_id), None)
+    if not reward:
+        return jsonify({"success": False, "error": "Reward not found"}), 404
+
+    if user_coins < reward["cost"]:
+        return jsonify({
+            "success": False, 
+            "error": f"Insufficient EcoCoins! You need {reward['cost']} EcoCoins, but only have {user_coins}."
+        }), 400
+
+    code_suffix = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+    voucher_code = f"GS-{reward['voucher_prefix']}-{code_suffix}"
+    expires_dt = datetime.fromtimestamp(time.time() + 30 * 86400)
+    
+    voucher = {
+        "id": f"vch-{int(time.time() * 1000)}",
+        "code": voucher_code,
+        "reward_id": reward["id"],
+        "reward_title": reward["title"],
+        "cost": reward["cost"],
+        "icon": reward["icon"],
+        "partner": reward["partner"],
+        "user_name": user_name,
+        "instructions": reward["instructions"],
+        "discount": reward["discount"],
+        "created_at": datetime.now().strftime("%b %d, %Y - %I:%M %p"),
+        "expires_at": expires_dt.strftime("%b %d, %Y"),
+        "status": "Active"
+    }
+    
+    vouchers = load_json(VOUCHERS_FILE, [])
+    vouchers.insert(0, voucher)
+    save_json(VOUCHERS_FILE, vouchers[:100])
+    
+    remaining_coins = user_coins - reward["cost"]
+    return jsonify({
+        "success": True,
+        "message": f"Successfully redeemed '{reward['title']}'!",
+        "voucher": voucher,
+        "remaining_coins": remaining_coins
+    })
+
+@app.route("/api/shop/vouchers", methods=["GET"])
+def get_vouchers():
+    user = request.args.get("user_name", "").strip().lower()
+    vouchers = load_json(VOUCHERS_FILE, [])
+    if user:
+        vouchers = [v for v in vouchers if v.get("user_name", "").strip().lower() == user]
+    return jsonify(vouchers)
+
 @app.route("/api/nearby", methods=["GET"])
 def nearby_centers():
     cat = request.args.get("category", "all").lower()
@@ -267,10 +448,12 @@ def dataset_status():
     return jsonify(info)
 
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
     print("=" * 60)
-    print("GreenScan: Starting Flask Server on http://localhost:5000")
+    print(f"GreenScan: Starting Flask Server on port {port}")
     print("Tagline: Point. Learn. Recycle.")
     print("Team: B P S Kruthi (24951A05E9), Anreddy Lahari (24951A05F0)")
     print("=" * 60)
     load_trained_model()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    debug_mode = os.environ.get("FLASK_DEBUG", "False").lower() in ["true", "1"]
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)

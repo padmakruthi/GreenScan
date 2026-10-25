@@ -1,5 +1,293 @@
 [
   {
+    "id": "scan-1792943794748",
+    "category": "organic",
+    "category_name": "Organic & Biodegradable",
+    "confidence": 0.968,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:26 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943783780",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:26 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943767912",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:26 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943758150",
+    "category": "plastic",
+    "category_name": "Plastic Recyclable",
+    "confidence": 0.898,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:25 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943749242",
+    "category": "plastic",
+    "category_name": "Plastic Recyclable",
+    "confidence": 0.972,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:25 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943737310",
+    "category": "plastic",
+    "category_name": "Plastic Recyclable",
+    "confidence": 0.923,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:25 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943726799",
+    "category": "metal",
+    "category_name": "Metal & Cans",
+    "confidence": 0.942,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:25 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943709110",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:25 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943691550",
+    "category": "organic",
+    "category_name": "Organic & Biodegradable",
+    "confidence": 0.965,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:24 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943675613",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:24 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943661930",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:24 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943652076",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:24 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943640575",
+    "category": "glass",
+    "category_name": "Glass Container",
+    "confidence": 0.938,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:24 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943625863",
+    "category": "paper",
+    "category_name": "Paper & Cardboard",
+    "confidence": 0.904,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:23 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943604214",
+    "category": "metal",
+    "category_name": "Metal & Cans",
+    "confidence": 0.942,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:23 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943586248",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:23 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943046864",
+    "category": "glass",
+    "category_name": "Glass Container",
+    "confidence": 0.965,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:14 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943032828",
+    "category": "metal",
+    "category_name": "Metal & Cans",
+    "confidence": 0.942,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:13 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792943001097",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:13 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792942917695",
+    "category": "glass",
+    "category_name": "Glass Container",
+    "confidence": 0.965,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:11 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792942911356",
+    "category": "organic",
+    "category_name": "Organic & Biodegradable",
+    "confidence": 0.968,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 09:11 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792942124536",
+    "category": "organic",
+    "category_name": "Organic & Biodegradable",
+    "confidence": 0.962,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 08:58 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792942121093",
+    "category": "glass",
+    "category_name": "Glass Container / Jar",
+    "confidence": 0.962,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 08:58 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792942065178",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 08:57 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792942059591",
+    "category": "glass",
+    "category_name": "Glass Container",
+    "confidence": 0.965,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 08:57 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792942053695",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 08:57 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792942048103",
+    "category": "plastic",
+    "category_name": "Plastic Recyclable",
+    "confidence": 0.972,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 08:57 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792941931781",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 08:55 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792941871175",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 08:54 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792941862435",
+    "category": "e-waste",
+    "category_name": "Electronic Waste (E-Waste)",
+    "confidence": 0.978,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 08:54 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792940268480",
+    "category": "plastic",
+    "category_name": "Plastic Recyclable",
+    "confidence": 0.972,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 08:27 PM",
+    "thumbnail": null
+  },
+  {
+    "id": "scan-1792940245564",
+    "category": "metal",
+    "category_name": "Metal & Cans",
+    "confidence": 0.931,
+    "co2_saved_kg": 1.5,
+    "timestamp": "Oct 25, 2026 - 08:27 PM",
+    "thumbnail": null
+  },
+  {
     "id": "scan-1792692410114",
     "category": "paper",
     "category_name": "Paper & Cardboard",

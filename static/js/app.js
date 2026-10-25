@@ -10,11 +10,16 @@ const state = {
   userRank: 1,
   currentLang: localStorage.getItem("greenscan_lang") || "en",
   xp: parseInt(localStorage.getItem("greenscan_xp") || "380"),
+  ecoCoins: parseInt(localStorage.getItem("greenscan_ecocoins") || localStorage.getItem("greenscan_xp") || "380"),
   streak: parseInt(localStorage.getItem("greenscan_streak") || "5"),
   itemsSorted: parseInt(localStorage.getItem("greenscan_sorted") || "26"),
   co2Saved: parseFloat(localStorage.getItem("greenscan_co2") || "36.4"),
   unlockedCategories: JSON.parse(localStorage.getItem("greenscan_wastedex") || '["plastic", "paper", "metal"]'),
   history: JSON.parse(localStorage.getItem("greenscan_history") || '[]'),
+  redeemedVouchers: JSON.parse(localStorage.getItem("greenscan_vouchers") || '[]'),
+  voiceEnabled: localStorage.getItem("greenscan_voice_enabled") !== "false",
+  currentShopFilter: 'all',
+  shopCatalog: [],
   currentResult: null,
   activeMode: 'upload', // 'upload' or 'camera'
   stream: null,
@@ -229,6 +234,9 @@ const userLocationLabel = document.getElementById("user-location-label");
 // Initialize on Load
 document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
+  VoiceOverEngine.init();
+  setupShopCatalog();
+  updateShopBalanceUI();
   setupGoogleMapsAndRadar();
   updateUserProfileUI();
   updateImpactUI();
@@ -307,7 +315,14 @@ function setupEventListeners() {
     chk.addEventListener("change", () => {
       const allChecked = Array.from(document.querySelectorAll(".contam-check")).every(c => c.checked);
       if (allChecked) {
-        addXP(25, "Zero Contamination Bonus! +25 XP");
+        addXP(25, "Zero Contamination Bonus! +25 EcoCoins");
+        showVoiceNotification({
+          title: "Zero Contamination Bonus!",
+          message: "All sorting hygiene protocols verified! <strong>+25 EcoCoins</strong> added.",
+          icon: "✨",
+          type: "coins",
+          speakText: "Zero contamination verified! You earned twenty-five bonus EcoCoins!"
+        });
       }
     });
   });
@@ -356,6 +371,39 @@ function setupEventListeners() {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && videoModal && videoModal.style.display !== "none") {
       closeVideoModal();
+    }
+  });
+
+  // Voice-Over Narration Toggle
+  const voiceToggleBtn = document.getElementById("voice-toggle");
+  voiceToggleBtn?.addEventListener("click", () => {
+    VoiceOverEngine.toggle();
+  });
+
+  // Shop Category Filter Tabs
+  document.querySelectorAll(".shop-tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".shop-tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      state.currentShopFilter = btn.getAttribute("data-filter") || "all";
+      renderShopCatalog();
+    });
+  });
+
+  // Voucher Modal backdrop & close handlers
+  const voucherModal = document.getElementById("voucher-modal");
+  voucherModal?.addEventListener("click", (e) => {
+    if (e.target === voucherModal) closeVoucherModal();
+  });
+  const myVouchersModal = document.getElementById("my-vouchers-modal");
+  myVouchersModal?.addEventListener("click", (e) => {
+    if (e.target === myVouchersModal) closeMyVouchersModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      if (voucherModal && voucherModal.style.display !== "none") closeVoucherModal();
+      if (myVouchersModal && myVouchersModal.style.display !== "none") closeMyVouchersModal();
     }
   });
 
@@ -559,23 +607,23 @@ function setLoadingState(isLoading) {
   }
 }
 
-// Smart Client Classification ensuring plastic bottles are properly recognized
+// Smart Client Classification ensuring all waste categories are properly recognized
 function simulateSmartClassification(filename) {
   let selectedCat = "plastic";
   const lower = (filename || "").toLowerCase();
 
-  if (lower.includes("bottle") || lower.includes("plastic") || lower.includes("pet") || lower.includes("water")) {
-    selectedCat = "plastic";
-  } else if (lower.includes("paper") || lower.includes("cardboard") || lower.includes("box")) {
-    selectedCat = "paper";
-  } else if (lower.includes("metal") || lower.includes("can") || lower.includes("tin")) {
-    selectedCat = "metal";
-  } else if (lower.includes("glass") || lower.includes("jar") || lower.includes("wine")) {
-    selectedCat = "glass";
-  } else if (lower.includes("food") || lower.includes("organic") || lower.includes("peel") || lower.includes("trash")) {
-    selectedCat = "organic";
-  } else if (lower.includes("phone") || lower.includes("battery") || lower.includes("cable") || lower.includes("circuit")) {
+  if (lower.includes("phone") || lower.includes("battery") || lower.includes("cable") || lower.includes("circuit") || lower.includes("ewaste") || lower.includes("e-waste") || lower.includes("laptop") || lower.includes("keyboard") || lower.includes("computer") || lower.includes("pcb") || lower.includes("electronic")) {
     selectedCat = "e-waste";
+  } else if (lower.includes("tumbler") || lower.includes("glass") || lower.includes("jar") || lower.includes("wine") || lower.includes("pane")) {
+    selectedCat = "glass";
+  } else if (lower.includes("vegetable") || lower.includes("vegetables") || lower.includes("fruit") || lower.includes("fruits") || lower.includes("organic") || lower.includes("food") || lower.includes("peel") || lower.includes("compost")) {
+    selectedCat = "organic";
+  } else if (lower.includes("bottle") || lower.includes("plastic") || lower.includes("pet") || lower.includes("water") || lower.includes("crushed")) {
+    selectedCat = "plastic";
+  } else if (lower.includes("paper") || lower.includes("cardboard") || lower.includes("box") || lower.includes("carton") || lower.includes("newspaper") || lower.includes("corrugated")) {
+    selectedCat = "paper";
+  } else if (lower.includes("metal") || lower.includes("can") || lower.includes("tin") || lower.includes("aluminum") || lower.includes("foil") || lower.includes("soda")) {
+    selectedCat = "metal";
   }
 
   const catData = CategoryLibrary[selectedCat] || CategoryLibrary.plastic;
@@ -975,8 +1023,15 @@ function applyRealtimeCorrection(correctedCat) {
     updateWastedexUI();
   }
 
-  // 4. Reward XP for active learning & update leaderboard
-  addXP(35, `🎯 Model Refitted to ${catData.name}! +35 XP`);
+  // 4. Reward XP & EcoCoins for active learning & update leaderboard
+  addXP(35, `🎯 Model Refitted to ${catData.name}! +35 EcoCoins`);
+  showVoiceNotification({
+    title: "Active Learning Refit!",
+    message: `Model updated to <strong>${catData.name}</strong>. <strong>+35 EcoCoins</strong> rewarded!`,
+    icon: "🧠",
+    type: "scan",
+    speakText: `Active learning feedback recorded! Model refitted to ${catData.name}. Thirty-five EcoCoins added to your balance.`
+  });
 
   // 5. Send feedback to backend to persist active learning
   fetch("/api/feedback", {
@@ -1010,7 +1065,14 @@ function setupQuiz(quizData) {
         quizFeedback.textContent = `Correct! ${quizData.explanation}`;
         quizFeedback.style.color = "#16a34a";
         quizFeedback.style.display = "block";
-        addXP(50, "Quiz Master: +50 XP!");
+        addXP(50, "Quiz Master: +50 EcoCoins!");
+        showVoiceNotification({
+          title: "Quiz Master: Correct!",
+          message: `Great knowledge! <strong>+50 EcoCoins</strong> added to your wallet!`,
+          icon: "🏆",
+          type: "quiz",
+          speakText: "Correct answer! Excellent recycling knowledge! Fifty bonus EcoCoins added to your wallet."
+        });
       } else {
         btn.classList.add("wrong");
         const correctBtn = quizOptions.children[quizData.answer_index];
@@ -1018,7 +1080,14 @@ function setupQuiz(quizData) {
         quizFeedback.textContent = `Good try! Correct answer: ${quizData.options[quizData.answer_index]}. ${quizData.explanation}`;
         quizFeedback.style.color = "#ea580c";
         quizFeedback.style.display = "block";
-        addXP(15, "Knowledge Attempt: +15 XP");
+        addXP(15, "Knowledge Attempt: +15 EcoCoins");
+        showVoiceNotification({
+          title: "Knowledge Attempt",
+          message: `Good try! +15 EcoCoins earned. Correct answer: <strong>${quizData.options[quizData.answer_index]}</strong>`,
+          icon: "💡",
+          type: "quiz",
+          speakText: "Good attempt! Fifteen EcoCoins earned for attempting the quiz."
+        });
       }
     });
     quizOptions.appendChild(btn);
@@ -1029,7 +1098,19 @@ function setupQuiz(quizData) {
 function recordSuccessfulScan(data) {
   state.itemsSorted += 1;
   state.co2Saved = parseFloat((state.co2Saved + (data.co2_saved_kg || 1.2)).toFixed(2));
-  addXP(40, `Scan Identified! +40 XP`);
+  addXP(40, `Scan Identified! +40 EcoCoins`);
+
+  showVoiceNotification({
+    title: `AI Identified: ${data.name}`,
+    message: `Belongs in <strong>${data.bin_name}</strong>. You gained <strong>+40 EcoCoins</strong>!`,
+    icon: "♻️",
+    type: "scan",
+    speakText: `Identified: ${data.name}! Please discard in ${data.bin_name}. Forty EcoCoins added to your balance.`,
+    actionText: "Shop Now 🛍️",
+    onAction: () => {
+      document.getElementById("eco-shop-section")?.scrollIntoView({ behavior: "smooth" });
+    }
+  });
 
   // Check if name is needed on first scan
   if (!localStorage.getItem("greenscan_user_name")) {
@@ -1073,17 +1154,26 @@ function recordSuccessfulScan(data) {
   }).catch(() => {});
 }
 
-// Gamification: Add XP & Levels
+// Gamification: Add XP & EcoCoins
 function addXP(amount, message) {
   state.xp += amount;
+  state.ecoCoins += amount;
   localStorage.setItem("greenscan_xp", state.xp.toString());
+  localStorage.setItem("greenscan_ecocoins", state.ecoCoins.toString());
   updateImpactUI();
+  updateShopBalanceUI();
   if (message) showToast(message);
   syncLeaderboard();
 }
 
 function updateImpactUI() {
   if (xpDisplay) xpDisplay.textContent = `${state.xp} XP`;
+  const statCoins = document.getElementById("stat-ecocoins");
+  if (statCoins) statCoins.textContent = `${state.ecoCoins} Coins`;
+  const headerCoins = document.getElementById("header-ecocoins-count");
+  if (headerCoins) headerCoins.textContent = state.ecoCoins;
+  const shopCoins = document.getElementById("shop-balance-number");
+  if (shopCoins) shopCoins.textContent = state.ecoCoins;
   if (streakDisplay) streakDisplay.textContent = `${state.streak} Days`;
   if (sortedDisplay) sortedDisplay.textContent = state.itemsSorted;
   if (co2Display) co2Display.textContent = `${state.co2Saved} kg`;
@@ -1428,3 +1518,590 @@ function showToast(msg) {
     setTimeout(() => toast.remove(), 400);
   }, 3200);
 }
+
+// ====================================================================
+// GreenScan Voice-Over Narration Engine (Web Speech API)
+// ====================================================================
+const VoiceOverEngine = {
+  synth: typeof window !== "undefined" && "speechSynthesis" in window ? window.speechSynthesis : null,
+  voices: [],
+
+  init() {
+    if (!this.synth) {
+      console.warn("Speech Synthesis not available in this environment.");
+      return;
+    }
+    const loadVoices = () => {
+      this.voices = this.synth.getVoices();
+    };
+    loadVoices();
+    if (this.synth.onvoiceschanged !== undefined) {
+      this.synth.onvoiceschanged = loadVoices;
+    }
+    this.updateVoiceToggleUI();
+  },
+
+  updateVoiceToggleUI() {
+    const toggleBtn = document.getElementById("voice-toggle");
+    const icon = document.getElementById("voice-icon");
+    const label = document.getElementById("voice-label");
+    if (!toggleBtn) return;
+
+    if (state.voiceEnabled) {
+      toggleBtn.classList.remove("muted");
+      if (icon) icon.textContent = "🔊";
+      if (label) label.textContent = "Voice ON";
+    } else {
+      toggleBtn.classList.add("muted");
+      if (icon) icon.textContent = "🔇";
+      if (label) label.textContent = "Voice OFF";
+    }
+  },
+
+  toggle() {
+    state.voiceEnabled = !state.voiceEnabled;
+    localStorage.setItem("greenscan_voice_enabled", state.voiceEnabled.toString());
+    this.updateVoiceToggleUI();
+
+    if (!state.voiceEnabled) {
+      if (this.synth) this.synth.cancel();
+      showVoiceNotification({
+        title: "Voice Over Narration Muted",
+        message: "Audio guidance is now paused. Tap the speaker icon anytime to re-enable voice overs.",
+        icon: "🔇",
+        type: "info",
+        skipVoice: true
+      });
+    } else {
+      showVoiceNotification({
+        title: "Voice Over Narration Enabled",
+        message: "Audio announcements active! GreenScan will narrate waste categories, bin assignments, and EcoCoins rewards.",
+        icon: "🔊",
+        type: "scan",
+        speakText: "Voice guidance enabled! GreenScan will announce your scan results and eco rewards."
+      });
+    }
+  },
+
+  speak(text, onStart, onEnd) {
+    if (!state.voiceEnabled || !this.synth) return;
+    try {
+      this.synth.cancel(); // Stop any pending speech
+      const cleanText = text.replace(/[#*`_~]/g, "").replace(/\s+/g, " ").trim();
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+
+      if (!this.voices || this.voices.length === 0) {
+        this.voices = this.synth.getVoices();
+      }
+
+      // Priority: Natural English, Indian English, or general English
+      const voice = this.voices.find(v => (v.lang === "en-IN" || v.lang === "en_IN") && v.name.includes("Google")) ||
+                    this.voices.find(v => v.lang === "en-IN" || v.lang === "en_IN") ||
+                    this.voices.find(v => v.name.includes("Natural") || v.name.includes("Online")) ||
+                    this.voices.find(v => v.lang.startsWith("en")) ||
+                    this.voices[0];
+
+      if (voice) utterance.voice = voice;
+      utterance.rate = 1.02; // natural cadence
+      utterance.pitch = 1.05; // warm, energetic clarity
+      utterance.volume = 1.0;
+
+      utterance.onstart = () => {
+        document.querySelectorAll(".popup-soundwave").forEach(el => el.classList.add("active"));
+        if (typeof onStart === "function") onStart();
+      };
+
+      utterance.onend = () => {
+        document.querySelectorAll(".popup-soundwave").forEach(el => el.classList.remove("active"));
+        if (typeof onEnd === "function") onEnd();
+      };
+
+      utterance.onerror = () => {
+        document.querySelectorAll(".popup-soundwave").forEach(el => el.classList.remove("active"));
+      };
+
+      this.synth.speak(utterance);
+    } catch (err) {
+      console.warn("Speech synthesis error:", err);
+    }
+  }
+};
+
+// ====================================================================
+// Interactive Notification Popup System with Sound Waves
+// ====================================================================
+function showVoiceNotification(options) {
+  const {
+    title = "GreenScan Eco Notice",
+    message = "",
+    icon = "✨",
+    type = "scan", // 'scan', 'coins', 'reward', 'quiz'
+    speakText = null,
+    skipVoice = false,
+    actionText = null,
+    onAction = null
+  } = options;
+
+  const container = document.getElementById("greenscan-popup-container");
+  if (!container) return;
+
+  const textToSpeak = speakText || `${title}. ${message}`;
+  if (!skipVoice && state.voiceEnabled) {
+    VoiceOverEngine.speak(textToSpeak);
+  }
+
+  const popup = document.createElement("div");
+  popup.className = `greenscan-popup popup-${type}`;
+
+  popup.innerHTML = `
+    <div class="popup-top-row">
+      <div class="popup-left-badge">
+        <span class="popup-icon-glyph">${icon}</span>
+        <span class="popup-title">${title}</span>
+      </div>
+      <div class="popup-voice-status">
+        <div class="popup-soundwave ${state.voiceEnabled && !skipVoice ? 'active' : ''}" title="Voice Over Active">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <button class="popup-close-btn" title="Dismiss notification" aria-label="Dismiss">&times;</button>
+      </div>
+    </div>
+    <div class="popup-message-txt">${message}</div>
+    <div class="popup-actions-row">
+      <button class="btn-popup-replay" title="Replay Voice Announcement">
+        <span>🔊</span> Replay Voice
+      </button>
+      ${actionText ? `<button class="btn-popup-cta">${actionText}</button>` : ""}
+    </div>
+    <div class="popup-progress-line"></div>
+  `;
+
+  // Attach Replay Voice handler
+  const replayBtn = popup.querySelector(".btn-popup-replay");
+  replayBtn?.addEventListener("click", () => {
+    VoiceOverEngine.speak(textToSpeak);
+  });
+
+  // Attach Action button
+  if (actionText && typeof onAction === "function") {
+    const actBtn = popup.querySelector(".btn-popup-cta");
+    actBtn?.addEventListener("click", () => {
+      onAction();
+      dismissPopup(popup);
+    });
+  }
+
+  // Close button
+  const closeBtn = popup.querySelector(".popup-close-btn");
+  closeBtn?.addEventListener("click", () => dismissPopup(popup));
+
+  container.prepend(popup);
+
+  // Maximum 3 visible popups at once
+  while (container.children.length > 3) {
+    dismissPopup(container.lastElementChild);
+  }
+
+  // Auto-dismiss in 6 seconds
+  let dismissTimer = setTimeout(() => dismissPopup(popup), 6000);
+
+  popup.addEventListener("mouseenter", () => clearTimeout(dismissTimer));
+  popup.addEventListener("mouseleave", () => {
+    dismissTimer = setTimeout(() => dismissPopup(popup), 3500);
+  });
+}
+
+function dismissPopup(popup) {
+  if (!popup || !popup.parentNode) return;
+  popup.style.opacity = "0";
+  popup.style.transform = "translateX(50px) scale(0.92)";
+  setTimeout(() => {
+    if (popup.parentNode) popup.remove();
+  }, 280);
+}
+
+// ====================================================================
+// EcoRewards "Shop Now" Store Engine & Voucher Generation
+// ====================================================================
+const DEFAULT_SHOP_CATALOG = [
+  {
+    id: "tree_mangrove",
+    title: "Plant a Native Tree in Hyderabad",
+    category: "impact",
+    cost: 150,
+    icon: "🌱",
+    image: "/static/img/rewards/tree_sapling.jpg",
+    partner: "Telangana Haritha Haram & Green India",
+    description: "GreenScan sponsors planting 1 geo-tagged native sapling (Neem/Gulmohar) with periodic growth tracking.",
+    badge: "Real Impact",
+    voucher_prefix: "TREE",
+    instructions: "Your tree id is registered with Telangana Forest Dept. Certificate issued with your name.",
+    discount: "1 Tree Planted"
+  },
+  {
+    id: "bamboo_kit",
+    title: "20% Off Eco Bamboo Kit & Stainless Bottle",
+    category: "products",
+    cost: 100,
+    icon: "🎋",
+    image: "/static/img/rewards/bamboo_kit.jpg",
+    partner: "EcoLife Sustainable Essentials",
+    description: "Premium 4-piece bamboo cutlery set, travel pouch, and double-walled insulated stainless steel flask.",
+    badge: "Popular",
+    voucher_prefix: "BAMBOO",
+    instructions: "Apply coupon code at checkout on EcoLife Essentials website for flat 20% discount.",
+    discount: "20% Discount"
+  },
+  {
+    id: "organic_cafe",
+    title: "Free Organic Fair-Trade Coffee Voucher",
+    category: "perks",
+    cost: 80,
+    icon: "☕",
+    image: "/static/img/rewards/organic_coffee.jpg",
+    partner: "Roast & Roots Organic Cafe",
+    description: "Enjoy one complimentary barista-brewed artisanal organic coffee or matcha tea in a reusable mug.",
+    badge: "Hot Perk",
+    voucher_prefix: "CAFE",
+    instructions: "Present the digital QR / alphanumeric voucher code at the barista counter.",
+    discount: "1 Free Drink"
+  },
+  {
+    id: "cotton_tote",
+    title: "100% Recycled Cotton Heavyweight Tote Bag",
+    category: "products",
+    cost: 120,
+    icon: "🎒",
+    image: "/static/img/rewards/cotton_tote.jpg",
+    partner: "Circular Fashion Co.",
+    description: "Durable shopping bag woven from 100% recovered post-consumer cotton and ocean-bound plastics.",
+    badge: "Zero Plastic",
+    voucher_prefix: "TOTE",
+    instructions: "Redeem for 100% discount with free home dispatch via partner courier.",
+    discount: "1 Free Bag"
+  },
+  {
+    id: "green_transit",
+    title: "Smart City Green Transit 1-Day Pass",
+    category: "mobility",
+    cost: 60,
+    icon: "🚌",
+    image: "/static/img/rewards/green_transit.jpg",
+    partner: "Hyderabad Metro & TSRTC EV Fleet",
+    description: "Unlimited 24-hour electric bus and metro rail transit pass across all Smart City corridors.",
+    badge: "Zero Emission",
+    voucher_prefix: "METRO",
+    instructions: "Enter token in the Smart Transit App or scan QR ticket at metro turnstile.",
+    discount: "Free Day Pass"
+  },
+  {
+    id: "zero_waste_cert",
+    title: "Official 'Zero Waste Legend' EDP Certificate",
+    category: "digital",
+    cost: 200,
+    icon: "🎖️",
+    image: "/static/img/rewards/edp_certificate.jpg",
+    partner: "GreenScan EDP Research Project",
+    description: "Verified digital recognition signed by B P S Kruthi & Anreddy Lahari, certified for your academic portfolio.",
+    badge: "EDP Certified",
+    voucher_prefix: "CERT",
+    instructions: "Digital credential issued with cryptographic authenticity hash.",
+    discount: "Official Badge"
+  },
+  {
+    id: "solar_credit",
+    title: "5 kWh Community Solar Energy Offset",
+    category: "impact",
+    cost: 250,
+    icon: "⚡",
+    image: "/static/img/rewards/solar_offset.jpg",
+    partner: "CleanGrid Smart Solar Initiative",
+    description: "Diverts 5 kilowatt-hours of clean solar generation into municipal EV charging stations in your name.",
+    badge: "Clean Energy",
+    voucher_prefix: "SOLAR",
+    instructions: "Credits assigned directly to Smart City Renewable Registry with public recognition.",
+    discount: "5 kWh Clean Power"
+  },
+  {
+    id: "organic_soap",
+    title: "Zero-Waste Organic Soap & Shampoo Bar",
+    category: "products",
+    cost: 90,
+    icon: "🧼",
+    image: "/static/img/rewards/organic_soap.jpg",
+    partner: "WildEarth Botanicals",
+    description: "Cold-pressed, plastic-free personal care bar crafted from organic neem, aloe vera, and essential oils.",
+    badge: "Eco Living",
+    voucher_prefix: "SOAP",
+    instructions: "Use voucher code for free sample bar shipped in compostable packaging.",
+    discount: "1 Free Bar"
+  }
+];
+
+async function setupShopCatalog() {
+  try {
+    const res = await fetch("/api/shop/catalog");
+    if (res.ok) {
+      const data = await res.json();
+      state.shopCatalog = data.catalog || DEFAULT_SHOP_CATALOG;
+    } else {
+      state.shopCatalog = DEFAULT_SHOP_CATALOG;
+    }
+  } catch (err) {
+    state.shopCatalog = DEFAULT_SHOP_CATALOG;
+  }
+  renderShopCatalog();
+}
+
+function renderShopCatalog() {
+  const grid = document.getElementById("eco-shop-grid");
+  if (!grid) return;
+
+  const catalog = state.shopCatalog && state.shopCatalog.length > 0 
+    ? state.shopCatalog 
+    : DEFAULT_SHOP_CATALOG;
+
+  const filtered = state.currentShopFilter === "all" 
+    ? catalog 
+    : catalog.filter(item => item.category === state.currentShopFilter);
+
+  grid.innerHTML = filtered.map(item => {
+    const canAfford = state.ecoCoins >= item.cost;
+    const diff = item.cost - state.ecoCoins;
+
+    return `
+      <div class="eco-reward-card" data-reward-id="${item.id}">
+        <div class="reward-photo-box">
+          <img src="${item.image || '/static/img/rewards/tree_sapling.jpg'}" alt="${item.title}" class="reward-photo-img" loading="lazy" onerror="this.src='/static/img/hero_banner.png'">
+          <span class="reward-badge-pill overlay">${item.badge}</span>
+          <div class="reward-icon-circle-overlay">${item.icon}</div>
+        </div>
+        <div class="reward-card-content">
+          <div class="reward-card-body">
+            <h4>${item.title}</h4>
+            <span class="reward-partner-tag">${item.partner}</span>
+            <p class="reward-desc">${item.description}</p>
+          </div>
+          <div class="reward-card-footer">
+            <div class="reward-cost-box">
+              <span style="font-size: 1.25rem;">🪙</span>
+              <div>
+                <span class="reward-cost-coins">${item.cost}</span>
+                <span class="reward-cost-label"> EcoCoins</span>
+              </div>
+            </div>
+            ${canAfford ? `
+              <button class="btn-redeem-item" onclick="redeemShopReward('${item.id}')">
+                Redeem Now →
+              </button>
+            ` : `
+              <button class="btn-redeem-item need-coins" onclick="handleInsufficientCoins('${item.title.replace(/'/g, "\\'")}', ${diff})">
+                Need ${diff} more 🪙
+              </button>
+            `}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function handleInsufficientCoins(rewardTitle, needed) {
+  showVoiceNotification({
+    title: "More EcoCoins Needed!",
+    message: `You need <strong>${needed} more EcoCoins</strong> to redeem <em>${rewardTitle}</em>. Scan recyclable items or complete quizzes to earn more!`,
+    icon: "🪙",
+    type: "coins",
+    speakText: `You need ${needed} more EcoCoins to claim ${rewardTitle}. Scan recyclable waste to earn more coins!`,
+    actionText: "Scan Waste Now 📷",
+    onAction: () => {
+      document.getElementById("scan-studio")?.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+}
+
+async function redeemShopReward(rewardId) {
+  const catalog = state.shopCatalog.length > 0 ? state.shopCatalog : DEFAULT_SHOP_CATALOG;
+  const item = catalog.find(r => r.id === rewardId);
+  if (!item) return;
+
+  if (state.ecoCoins < item.cost) {
+    handleInsufficientCoins(item.title, item.cost - state.ecoCoins);
+    return;
+  }
+
+  let voucher = null;
+  try {
+    const res = await fetch("/api/shop/redeem", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        reward_id: item.id,
+        user_name: state.userName,
+        eco_coins: state.ecoCoins
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      voucher = data.voucher;
+      state.ecoCoins = data.remaining_coins;
+    }
+  } catch (err) {
+    console.warn("Using offline voucher generation:", err);
+  }
+
+  // Fallback client-side voucher if offline
+  if (!voucher) {
+    const randomCode = Math.random().toString(36).substring(2, 7).toUpperCase();
+    const expiry = new Date();
+    expiry.setDate(expiry.getDate() + 30);
+    voucher = {
+      id: `vch-${Date.now()}`,
+      code: `GS-${item.voucher_prefix}-${randomCode}`,
+      reward_id: item.id,
+      reward_title: item.title,
+      cost: item.cost,
+      icon: item.icon,
+      partner: item.partner,
+      user_name: state.userName,
+      instructions: item.instructions,
+      discount: item.discount,
+      created_at: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      expires_at: expiry.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      status: "Active"
+    };
+    state.ecoCoins -= item.cost;
+  }
+
+  // Save new EcoCoins balance and voucher
+  localStorage.setItem("greenscan_ecocoins", state.ecoCoins.toString());
+  state.redeemedVouchers.unshift(voucher);
+  localStorage.setItem("greenscan_vouchers", JSON.stringify(state.redeemedVouchers));
+
+  updateShopBalanceUI();
+  updateImpactUI();
+
+  // Open Voucher Celebration Modal
+  openVoucherModal(voucher);
+
+  // Announce via Voice Over and Rich Popup
+  showVoiceNotification({
+    title: "🎉 Reward Redeemed!",
+    message: `Successfully redeemed <strong>${item.title}</strong> for ${item.cost} EcoCoins! Voucher code: <code>${voucher.code}</code>`,
+    icon: item.icon,
+    type: "reward",
+    speakText: `Congratulations ${state.userName}! You successfully redeemed ${item.title} for ${item.cost} EcoCoins! Your voucher code is ${voucher.code}.`
+  });
+}
+
+function updateShopBalanceUI() {
+  const shopBalance = document.getElementById("shop-balance-number");
+  const headerCoins = document.getElementById("header-ecocoins-count");
+  const statCoins = document.getElementById("stat-ecocoins");
+  const voucherCount = document.getElementById("my-vouchers-badge");
+
+  if (shopBalance) shopBalance.textContent = state.ecoCoins;
+  if (headerCoins) headerCoins.textContent = state.ecoCoins;
+  if (statCoins) statCoins.textContent = `${state.ecoCoins} Coins`;
+  if (voucherCount) voucherCount.textContent = (state.redeemedVouchers || []).length;
+
+  renderShopCatalog();
+}
+
+function openVoucherModal(voucher) {
+  const modal = document.getElementById("voucher-modal");
+  const title = document.getElementById("voucher-modal-title");
+  const partner = document.getElementById("voucher-modal-partner");
+  const code = document.getElementById("voucher-modal-code");
+  const instructions = document.getElementById("voucher-modal-instructions");
+  const icon = document.getElementById("voucher-modal-icon");
+
+  if (title) title.textContent = voucher.reward_title;
+  if (partner) partner.textContent = `${voucher.partner} • Expires: ${voucher.expires_at}`;
+  if (code) code.textContent = voucher.code;
+  if (instructions) instructions.innerHTML = `<strong>Instructions:</strong> ${voucher.instructions}<br><small style="color: #64748b; margin-top: 6px; display: block;">Issued to: ${voucher.user_name} | Status: ${voucher.status}</small>`;
+  if (icon) icon.textContent = voucher.icon;
+
+  if (modal) {
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function closeVoucherModal() {
+  const modal = document.getElementById("voucher-modal");
+  if (modal) modal.style.display = "none";
+  document.body.style.overflow = "";
+}
+
+function copyVoucherCode() {
+  const codeEl = document.getElementById("voucher-modal-code");
+  if (!codeEl) return;
+  const codeText = codeEl.textContent.trim();
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(codeText).then(() => {
+      showToast(`📋 Copied voucher code ${codeText} to clipboard!`);
+    }).catch(() => {
+      showToast(`Voucher code: ${codeText}`);
+    });
+  } else {
+    showToast(`Voucher code: ${codeText}`);
+  }
+}
+
+function openMyVouchersModal() {
+  const modal = document.getElementById("my-vouchers-modal");
+  const listContainer = document.getElementById("my-vouchers-list");
+  if (!listContainer) return;
+
+  const vouchers = state.redeemedVouchers || [];
+  if (vouchers.length === 0) {
+    listContainer.innerHTML = `
+      <div style="text-align: center; padding: 32px 16px; color: var(--text-muted);">
+        <span style="font-size: 2.2rem; display: block; margin-bottom: 8px;">🎟️</span>
+        <h4 style="font-weight: 800; color: var(--text-main); margin-bottom: 4px;">No Vouchers Yet</h4>
+        <p style="font-size: 0.85rem;">You currently have ${state.ecoCoins} EcoCoins. Browse the rewards catalog and redeem your first sustainable perk!</p>
+      </div>
+    `;
+  } else {
+    listContainer.innerHTML = vouchers.map(v => `
+      <div class="voucher-item-row">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 1.8rem;">${v.icon || "🎟️"}</span>
+          <div class="v-info">
+            <h5>${v.reward_title}</h5>
+            <p>${v.partner} • Claimed on ${v.created_at}</p>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+          <span class="v-code-pill">${v.code}</span>
+          <button style="background: none; border: none; color: #0284c7; font-size: 0.72rem; font-weight: 700; cursor: pointer;" onclick="navigator.clipboard?.writeText('${v.code}'); showToast('Copied ${v.code}!');">Copy Code 📋</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  if (modal) {
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function closeMyVouchersModal() {
+  const modal = document.getElementById("my-vouchers-modal");
+  if (modal) modal.style.display = "none";
+  document.body.style.overflow = "";
+}
+
+// Expose Shop & Voice functions globally for inline HTML onclick handlers
+window.redeemShopReward = redeemShopReward;
+window.handleInsufficientCoins = handleInsufficientCoins;
+window.openMyVouchersModal = openMyVouchersModal;
+window.closeMyVouchersModal = closeMyVouchersModal;
+window.openVoucherModal = openVoucherModal;
+window.closeVoucherModal = closeVoucherModal;
+window.copyVoucherCode = copyVoucherCode;
+window.VoiceOverEngine = VoiceOverEngine;
+window.showVoiceNotification = showVoiceNotification;
+

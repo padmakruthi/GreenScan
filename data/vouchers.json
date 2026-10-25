@@ -1,0 +1,62 @@
+[
+  {
+    "id": "vch-1792942964826",
+    "code": "GS-CAFE-WEBYL",
+    "reward_id": "organic_cafe",
+    "reward_title": "Free Organic Fair-Trade Coffee Voucher",
+    "cost": 80,
+    "icon": "☕",
+    "partner": "Roast & Roots Organic Cafe",
+    "user_name": "padma",
+    "instructions": "Present the digital QR / alphanumeric voucher code at the barista counter.",
+    "discount": "1 Free Drink",
+    "created_at": "Oct 25, 2026 - 09:12 PM",
+    "expires_at": "Nov 24, 2026",
+    "status": "Active"
+  },
+  {
+    "id": "vch-1792942099893",
+    "code": "GS-CERT-NPP4N",
+    "reward_id": "zero_waste_cert",
+    "reward_title": "Official 'Zero Waste Legend' EDP Certificate",
+    "cost": 200,
+    "icon": "🎖️",
+    "partner": "GreenScan EDP Research Project",
+    "user_name": "Kruthi",
+    "instructions": "Digital credential issued with cryptographic authenticity hash.",
+    "discount": "Official Badge",
+    "created_at": "Oct 25, 2026 - 08:58 PM",
+    "expires_at": "Nov 24, 2026",
+    "status": "Active"
+  },
+  {
+    "id": "vch-1792940285917",
+    "code": "GS-BAMBOO-BI8J2",
+    "reward_id": "bamboo_kit",
+    "reward_title": "20% Off Eco Bamboo Kit & Stainless Bottle",
+    "cost": 100,
+    "icon": "🎋",
+    "partner": "EcoLife Sustainable Essentials",
+    "user_name": "Kruthi",
+    "instructions": "Apply coupon code at checkout on EcoLife Essentials website for flat 20% discount.",
+    "discount": "20% Discount",
+    "created_at": "Oct 25, 2026 - 08:28 PM",
+    "expires_at": "Nov 24, 2026",
+    "status": "Active"
+  },
+  {
+    "id": "vch-1792939365488",
+    "code": "GS-TREE-232R9",
+    "reward_id": "tree_mangrove",
+    "reward_title": "Plant a Native Tree in Hyderabad",
+    "cost": 150,
+    "icon": "🌱",
+    "partner": "Telangana Haritha Haram & Green India",
+    "user_name": "Kruthi",
+    "instructions": "Your sapling tree id is registered with Telangana Forest Dept. Certificate will be delivered to your profile.",
+    "discount": "1 Tree Planted",
+    "created_at": "Oct 25, 2026 - 08:12 PM",
+    "expires_at": "Nov 24, 2026",
+    "status": "Active"
+  }
+]
